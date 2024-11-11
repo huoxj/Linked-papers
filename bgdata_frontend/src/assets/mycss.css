@@ -1,0 +1,28 @@
+.theme-red {
+  color: #C12127;
+}
+.theme-white {
+  color: #FFFFFF;
+}
+.theme-gray {
+  color: #8F9299;
+}
+.theme-dark {
+  color: #2A333C;
+}
+
+.h1 {
+  font-family: Inter, sans-serif;
+  font-size: 48px;
+  font-weight: bold;
+}
+.h2 {
+  font-family: Inter, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+.h3 {
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+}
