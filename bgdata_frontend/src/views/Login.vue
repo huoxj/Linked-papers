@@ -5,7 +5,6 @@ import {ref} from "vue";
 
 const email = ref("");
 const password = ref("");
-const showPassword = ref(false);
 
 const login = () => {
   console.log(email.value);
