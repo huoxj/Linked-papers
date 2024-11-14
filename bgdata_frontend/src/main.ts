@@ -8,7 +8,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 import '@/assets/mycss.css'
-import '@/assets/font.css'
+import '@/assets/Interfont/inter.css'
 
 const vuetify = createVuetify({
   components,
