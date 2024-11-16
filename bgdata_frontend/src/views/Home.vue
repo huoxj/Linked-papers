@@ -2,6 +2,7 @@
 
 import Header from "@/components/Header.vue";
 import router from "@/router";
+import ResultItem from "@/components/ResultItem.vue";
 
 function toSearch() {
   router.push("/search");
@@ -36,6 +37,15 @@ function toSearch() {
       </v-row>
     </v-container>
   </div>
+  <v-container width="130vh">
+    <v-row style="margin-bottom: 5px">
+      <p class="h2 theme-dark">Recommend for you</p>
+      <v-divider></v-divider>
+    </v-row>
+    <v-row justify="center">
+      <ResultItem v-for="id in [1, 2, 3, 4, 5]" :key="id"></ResultItem>
+    </v-row>
+  </v-container>
   <div>
 
   </div>

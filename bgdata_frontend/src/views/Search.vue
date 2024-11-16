@@ -13,7 +13,7 @@ const page = ref(1);
   <div class="upper-fill">
     <v-container class="search-wrapper">
       <v-row align="end" style="height: 70%" no-gutters>
-        <p class="h2 theme-dark">Total 0 Result for ""</p>
+        <p class="h2 theme-dark">Total 0 Result(s) for ""</p>
       </v-row>
       <v-row align="end" style="height: 20%" no-gutters>
           <v-text-field

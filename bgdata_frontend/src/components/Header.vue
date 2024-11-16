@@ -15,18 +15,19 @@
         <v-spacer></v-spacer>
         <v-col md="2" class="col_center" style="justify-content: right">
           <router-link to="/login">
-            <p class="h3 theme-white underline">Log in</p>
+            <p class="h4 theme-white underline">Log in</p>
           </router-link>
         </v-col>
         <v-col md="2" class="col_center">
           <router-link to="/register">
-            <p class="h3 theme-white underline">Register for FREE</p>
+            <p class="h4 theme-white underline">Register for FREE</p>
           </router-link>
         </v-col>
         <v-col md="1"></v-col>
       </v-row>
     </v-container>
   </div>
+  <div style="height: 70px"></div>
 </template>
 
 <style scoped>
