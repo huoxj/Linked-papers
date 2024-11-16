@@ -34,7 +34,7 @@ const repeatPasswordRules = [
   <v-container fluid class="py-8 h2" style="background-color: #f1f1f1; width: 100%;">
     <v-row>
       <v-col cols="12" class="text-left">
-        <h1 class="h1" style="margin-left: auto; padding-left: 100px;">Create a new account</h1>
+        <h1 class="h1 theme-dark" style="margin-left: auto; padding-left: 100px;">Create a new account</h1>
       </v-col>
     </v-row>
   </v-container>

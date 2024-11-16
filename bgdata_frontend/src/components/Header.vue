@@ -34,6 +34,9 @@
   background-color: #C12127;
   width: 100%;
   height: 70px;
+  position: fixed;
+  top: 0;
+  z-index: 999;
 }
 .no_link{
   text-decoration: none;

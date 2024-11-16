@@ -23,7 +23,7 @@ const login = () => {
         class="mx-0"
     >
       <v-col cols="12" sm="8" md="4" style="padding-top: 150px; padding-bottom: 12px;">
-        <h1 class="mb-4 h1">Log in</h1>
+        <h1 class="mb-4 h1 theme-dark">Log in</h1>
         <div class="theme-red" style="margin-bottom: 20px;">
           <router-link class="theme-red" to="/register">Need Registration?</router-link>
         </div>
