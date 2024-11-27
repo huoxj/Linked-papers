@@ -9,7 +9,3 @@ class UserInfo(BaseModel):
 
 class UserInfoRegister(UserInfo):
     password: str
-
-
-class UserInfoInDB(UserInfo):
-    encrypted_password: str
