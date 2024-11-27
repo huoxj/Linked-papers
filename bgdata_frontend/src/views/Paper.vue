@@ -4,6 +4,9 @@ import Header from "@/components/Header.vue";
 import RelationGraph, {type RGJsonData, type RGOptions} from "relation-graph-vue3";
 import {onMounted, ref} from "vue";
 import DrawerItem from "@/components/DrawerItem.vue";
+import type {PaperContent} from "@/utils/types";
+import router from "@/router";
+import {reqPaperContentBrief} from "@/api/paper";
 
 // Graph
 const jsonData:RGJsonData = {
@@ -39,15 +42,23 @@ onMounted(() => {
   graphRef.value?.setJsonData(jsonData);
 })
 
+// root paper info
+const rootPaperId = ref<number>(Number(router.currentRoute.value.params.id));
+const rootPaper = ref<PaperContent>({ title: "",  year: "",  category: "",  abstract: "",  refCount: 0 });
+const rootReferenceIdList = ref<number[]>([]);
+const rootFieldPaperIdList = ref<number[]>([]);
+const rootRelatedIdList = ref<number[]>([]);
+
+reqPaperContentBrief(rootPaperId.value).then(res => {
+  rootPaper.value.title = res[0].data.text;
+  rootPaper.value.abstract = res[1].data.text;
+  rootPaper.value.year = res[2].data.text;
+  rootPaper.value.category = res[3].data.text;
+  rootPaper.value.refCount = res[4].data.length;
+})
+
 // Tabs
 const detailTab = ref('abstract');
-
-// Tabs-detail
-const abstract = ref('In security-sensitive applications, the success of machine learning depends on a thorough vetting of their resistance to adversarial data. In one pertinent, well-motivated attack scenario, an adversary may attempt to evade a deployed system at test time by carefully manipulating attack samples. In this work, we present a simple but effective gradient-based approach that can be exploited to systemati， In this work, we present a simple but effective gradient-based approach that can be exploited to systemati')
-
-// Tabs-reference
-
-// Tabs-related
 
 </script>
 
@@ -114,7 +125,7 @@ const abstract = ref('In security-sensitive applications, the success of machine
       </v-tabs>
       <v-tabs-window v-model="detailTab">
         <v-tabs-window-item value="abstract">
-          <p class="theme-dark text-body">{{abstract}}</p>
+          <p class="theme-dark text-body" style="padding: 15px">{{abstract}}</p>
         </v-tabs-window-item>
         <v-tabs-window-item value="reference">
           <DrawerItem v-for="item in [1,2,3]"></DrawerItem>

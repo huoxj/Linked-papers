@@ -1,8 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
 const router = createRouter({
-
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -27,7 +26,7 @@ const router = createRouter({
       name: 'register',
       component: () => import('../views/Register.vue'),
     }, {
-      path: '/paper',
+      path: '/paper/:id',
       name: 'paper',
       component: () => import('../views/Paper.vue'),
     }

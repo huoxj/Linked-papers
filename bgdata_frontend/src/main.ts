@@ -9,11 +9,15 @@ import * as directives from 'vuetify/directives'
 
 import '@/assets/mycss.css'
 import '@/assets/Interfont/inter.css'
+import axios from "axios";
 
 const vuetify = createVuetify({
   components,
   directives,
 })
+
+axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.timeout = 30000
 
 const app = createApp(App)
 

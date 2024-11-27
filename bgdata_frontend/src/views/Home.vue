@@ -3,10 +3,32 @@
 import Header from "@/components/Header.vue";
 import router from "@/router";
 import ResultItem from "@/components/ResultItem.vue";
+import {ref} from "vue";
+import {reqRecommend} from "@/api/service";
+import type {PaperContent} from "@/utils/types";
+import {reqPaperContentBrief} from "@/api/paper";
 
-function toSearch() {
-  router.push("/search");
+
+const recommendIdList = ref<number[]>();
+
+// get recommend list
+reqRecommend().then(res => {
+  recommendIdList.value = res.data;
+})
+
+const searchKeywords = ref("");
+
+// do a simple search
+function doSearch() {
+  router.push({
+    path: "/search",
+    query: {
+      keywords: searchKeywords.value,
+      pageIndex: 1
+    }
+  });
 }
+
 </script>
 
 <template>
@@ -28,9 +50,10 @@ function toSearch() {
             placeholder="Search by title or abstract"
             single-line
             variant="solo"
+            v-model="searchKeywords"
           >
             <template v-slot:append>
-              <v-btn class="search-button" size="x-large" @click="toSearch">Search</v-btn>
+              <v-btn class="search-button" size="x-large" @click="doSearch">Search</v-btn>
             </template>
           </v-text-field>
         </v-col>
@@ -43,7 +66,7 @@ function toSearch() {
       <v-divider></v-divider>
     </v-row>
     <v-row justify="center">
-      <ResultItem v-for="id in [1, 2, 3, 4, 5]" :key="id"></ResultItem>
+      <ResultItem v-for="paperId in recommendIdList" :paper-id="paperId"></ResultItem>
     </v-row>
   </v-container>
   <div>

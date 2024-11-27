@@ -2,15 +2,25 @@
 
 import {ref} from "vue";
 import router from "@/router";
+import type {PaperContent} from "@/utils/types";
+import {reqPaperContentBrief} from "@/api/paper";
 
-const title = ref("Evasion Attacks against Machine Learning at Test Time")
-const year = ref(2013)
-const category = ref("cs.CR")
-const references = ref(10)
-const text = ref("In security-sensitive applications, the success of machine learning depends on a thorough vetting of their resistance to adversarial data. In one pertinent, well-motivated attack scenario, an adversary may attempt to evade a deployed system at test time by carefully manipulating attack samples. In this work, we present a simple but effective gradient-based approach that can be exploited to systemati， In this work, we present a simple but effective gradient-based approach that can be exploited to systemati")
+const props = defineProps(['paperId'])
+
+const paper = ref<PaperContent>({title: "", year: "", category: "", abstract: "", refCount: 0});
+
+reqPaperContentBrief(props.paperId).then(res => {
+  paper.value.title = res[0].data.text;
+  paper.value.abstract = res[1].data.text;
+  paper.value.year = res[2].data.text;
+  paper.value.category = res[3].data.text;
+  paper.value.refCount = res[4].data.length;
+})
 
 function toPaper() {
-  router.push('/paper')
+  router.push({
+    path: "/paper/" + props.paperId
+  })
 }
 
 </script>
@@ -23,19 +33,19 @@ function toPaper() {
     @click="toPaper"
   >
     <template v-slot:title >
-      <p class="h2 theme-dark" >{{title}}</p>
+      <p class="h2 theme-dark" >{{paper.title}}</p>
     </template>
     <template v-slot:subtitle>
       <v-container style="padding: 0">
         <v-row no-gutters>
-          <v-col md="1" class="">{{year}}</v-col>
-          <v-col md="1">{{category}}</v-col>
-          <v-col md="2">{{references}} References</v-col>
+          <v-col md="1" class="">{{paper.year}}</v-col>
+          <v-col md="1">{{paper.category}}</v-col>
+          <v-col md="2">{{paper.refCount}} References</v-col>
         </v-row>
       </v-container>
     </template>
     <template v-slot:text>
-        <p class="theme-gray h4">{{text}}</p>
+        <p class="theme-gray h4">{{paper.abstract}}</p>
     </template>
   </v-card>
 </template>

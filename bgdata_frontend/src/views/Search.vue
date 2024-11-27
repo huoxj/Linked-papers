@@ -2,9 +2,62 @@
 
 import Header from "@/components/Header.vue";
 import ResultItem from "@/components/ResultItem.vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
+import router from "@/router";
+import {reqSearch} from "@/api/service";
 
-const page = ref(1);
+const routerQuery = router.currentRoute.value.query;
+const searchKeywords = ref<string>(routerQuery.keywords as string);
+const searchIdList = ref<number[]>([]);
+const page = ref(Number(routerQuery.pageIndex as string));
+const totalPage = ref(1);
+
+let searchParams = {
+  key: searchKeywords.value,
+  page: page.value
+}
+
+function updateList() {
+  console.log(searchParams)
+  reqSearch(searchParams).then(res => {
+    searchIdList.value = res.data.idList;
+    totalPage.value = res.data.totalPage;
+  })
+}
+
+// initial search
+updateList();
+
+// watch page change
+const onPageChange = watch(page, (newPage) => {
+  router.push({
+    path: "/search",
+    query: {
+      keywords: searchKeywords.value,
+      pageIndex: newPage
+    }
+  })
+  searchParams.page = newPage;
+  updateList();
+  window.scrollTo(0, 0);
+});
+
+// do a new search
+const inputKeywords = ref<string>("");
+function doSearch() {
+  router.push({
+    path: "/search",
+    query: {
+      keywords: inputKeywords.value,
+      pageIndex: 1
+    }
+  });
+  searchKeywords.value = inputKeywords.value;
+  searchParams.key = inputKeywords.value;
+  searchParams.page = 1;
+  page.value = 1;
+  updateList();
+}
 
 </script>
 
@@ -13,10 +66,11 @@ const page = ref(1);
   <div class="upper-fill">
     <v-container class="search-wrapper">
       <v-row align="end" style="height: 70%" no-gutters>
-        <p class="h2 theme-dark">Total 0 Result(s) for ""</p>
+        <p class="h2 theme-dark">Total 0 Result(s) for "{{searchKeywords}}"</p>
       </v-row>
       <v-row align="end" style="height: 20%" no-gutters>
           <v-text-field
+            v-model="inputKeywords"
             placeholder="Search by title or abstract"
             single-line
             variant="solo"
@@ -24,7 +78,7 @@ const page = ref(1);
             style="width: 100%"
           >
             <template v-slot:append>
-              <v-btn class="search-button" size="large" @click="toSearch">Search</v-btn>
+              <v-btn class="search-button" size="large" @click="doSearch()">Search</v-btn>
             </template>
           </v-text-field>
       </v-row>
@@ -32,10 +86,14 @@ const page = ref(1);
   </div>
   <v-container>
     <v-row justify="center">
-      <ResultItem v-for="id in [1, 2, 3, 4, 5]" :key="id"></ResultItem>
+      <ResultItem v-for="paperId in searchIdList" :paper-id="paperId"></ResultItem>
     </v-row>
   </v-container>
-  <v-pagination :v-bind="page" length="10" total-visible="5"></v-pagination>
+  <v-pagination
+    v-model="page"
+    :length="totalPage"
+    total-visible="5"
+  ></v-pagination>
   <div class="bottom-fill"></div>
 </template>
 
