@@ -17,7 +17,7 @@ router = APIRouter(
 async def get_abstract(
         paper_id: Annotated[int, Query(alias='id')],
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[str]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
@@ -25,7 +25,7 @@ async def get_abstract(
 async def get_title(
         paper_id: Annotated[int, Query(alias='id')],
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[str]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
@@ -33,7 +33,7 @@ async def get_title(
 async def get_reference_list(
         paper_id: Annotated[int, Query(alias='id')],
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[list[int]]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
@@ -41,7 +41,7 @@ async def get_reference_list(
 async def get_year(
         paper_id: Annotated[int, Query(alias='id')],
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[str]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
@@ -49,7 +49,7 @@ async def get_year(
 async def get_category(
         paper_id: Annotated[int, Query(alias='id')],
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[str]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
@@ -57,7 +57,7 @@ async def get_category(
 async def get_related_list(
         paper_id: Annotated[int, Query(alias='id')],
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[list[int]]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
@@ -65,5 +65,5 @@ async def get_related_list(
 async def get_same_category_list(
         paper_id: Annotated[int, Query(alias='id')],
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[list[int]]:
   raise HTTPException(status_code=500, detail='Unimplemented.')

@@ -1,3 +1,4 @@
 def get_current_user():
-  # if not current_user, raise exception to indicate unauthorized
-  raise NotImplementedError()
+  # if not current_user, raises an exception to indicate unauthorized
+  # otherwise, returns an UserInfo
+  pass

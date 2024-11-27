@@ -19,12 +19,12 @@ async def search(
         key: Annotated[str, Query()],
         page: Annotated[int, Query(ge=1)],
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[dict]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
 @router.get('/recommend')
 async def recommend(
         user: Annotated[UserInfo, Depends(get_current_user)]
-) -> ResponseWrapper:
+) -> ResponseWrapper[list[int]]:
   raise HTTPException(status_code=500, detail='Unimplemented.')

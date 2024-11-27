@@ -1,9 +1,9 @@
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Body, HTTPException, Query
 
 from ..models.misc import ResponseWrapper
-from ..models.user import UserInfoIn
+from ..models.user import UserInfoRegister
 
 
 router = APIRouter(
@@ -15,14 +15,14 @@ router = APIRouter(
 
 @router.post('/register')
 async def register(
-        user: Annotated[UserInfoIn, Query()]
-) -> ResponseWrapper:
+        user: Annotated[UserInfoRegister, Body()]
+) -> ResponseWrapper[dict]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
 @router.post('/login')
 async def login(
-        email: Annotated[str, Query()],
-        password: Annotated[str, Query()]
-) -> ResponseWrapper:
+        email: Annotated[str, Body()],
+        password: Annotated[str, Body()],
+) -> ResponseWrapper[dict]:
   raise HTTPException(status_code=500, detail='Unimplemented.')

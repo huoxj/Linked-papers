@@ -7,7 +7,7 @@ class UserInfo(BaseModel):
     premium: bool
 
 
-class UserInfoIn(UserInfo):
+class UserInfoRegister(UserInfo):
     password: str
 
 
