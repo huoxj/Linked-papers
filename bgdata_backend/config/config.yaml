@@ -1,0 +1,6 @@
+mysql:
+  user: root # modify on your own
+  password: 123456 # modify on your own
+  url: 127.0.0.1
+  port: 3306
+  database: linked_papers # create manually on your own
