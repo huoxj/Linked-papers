@@ -4,3 +4,8 @@ mysql:
   url: 127.0.0.1
   port: 3306
   database: linked_papers # create manually on your own
+
+auth:
+  secret_key: 1139ae028d45cc00f4495132fe03985e4bfe52c009bb3117c200b415b7da4cc4
+  algorithm: HS256
+  expired_time: 360 # unit: minute

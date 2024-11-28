@@ -7,6 +7,7 @@ from ..models.misc import ResponseWrapper
 from ..models.user import UserRegister
 from ..services.user import create_user, read_user
 from ..utils.authentification import user_to_token
+from ..utils.encryption import verify_string
 
 router = APIRouter(
   prefix='/user',
@@ -31,8 +32,8 @@ async def login(
         password: Annotated[str, Body()],
         session: SessionDep
 ) -> ResponseWrapper[dict]:
-  user = read_user(email, password, session)
-  if user is None:
+  user = read_user(email, session)
+  if user is None or not verify_string(password, user.password):
     return ResponseWrapper(status=1, data={})
   data = {
     'username': user.username,

@@ -5,7 +5,7 @@ from fastapi.params import Depends
 
 from ..models.misc import ResponseWrapper
 from ..models.user import User
-from ..dependencies import get_current_user
+from ..dependencies import get_current_user, authenticate_user
 
 router = APIRouter(
   prefix='/service',
@@ -14,16 +14,15 @@ router = APIRouter(
 )
 
 
-@router.get('/search')
+@router.get('/search', dependencies=[Depends(authenticate_user)])
 async def search(
         key: Annotated[str, Query()],
         page: Annotated[int, Query(ge=1)],
-        user: Annotated[User, Depends(get_current_user)]
 ) -> ResponseWrapper[dict]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
-@router.get('/recommend')
+@router.get('/recommend', dependencies=[Depends(authenticate_user)])
 async def recommend(
         user: Annotated[User, Depends(get_current_user)]
 ) -> ResponseWrapper[list[int]]:

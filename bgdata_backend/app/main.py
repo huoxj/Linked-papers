@@ -3,8 +3,8 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 
-from app.dependencies import create_db_and_tables
 from app.routers import paper, service, user
+from app.utils.database import create_db_and_tables
 
 
 @asynccontextmanager
