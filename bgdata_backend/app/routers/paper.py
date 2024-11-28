@@ -3,8 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session
 
-from ..dependencies import get_session, authenticate_user, require_premium
-from ..models.misc import ResponseWrapper
+from ..dependencies import get_session, authenticate_user, require_premium, ResponseWrapper
 from ..services.paper import read_paper, read_related_papers, read_papers_with_same_category
 
 router = APIRouter(

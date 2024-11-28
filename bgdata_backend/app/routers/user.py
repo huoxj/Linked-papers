@@ -2,8 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Body
 
-from ..dependencies import SessionDep
-from ..models.misc import ResponseWrapper
+from ..dependencies import SessionDep, ResponseWrapper
 from ..models.user import UserRegister
 from ..services.user import create_user, read_user
 from ..utils.authentification import user_to_token

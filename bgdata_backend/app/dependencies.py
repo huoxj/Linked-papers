@@ -1,7 +1,8 @@
-from typing import Annotated
+from typing import Annotated, Generic, TypeVar
 
 from fastapi import HTTPException, status
 from fastapi.params import Depends, Header
+from pydantic import BaseModel
 from sqlmodel import Session
 
 from app.models.user import User
@@ -9,6 +10,13 @@ from app.utils.authentification import token_to_user
 from app.utils.database import get_session
 
 SessionDep = Annotated[Session, Depends(get_session)]
+
+T = TypeVar('T')
+
+
+class ResponseWrapper(BaseModel, Generic[T]):
+  status: int = 0
+  data: T
 
 
 def authenticate_user(
