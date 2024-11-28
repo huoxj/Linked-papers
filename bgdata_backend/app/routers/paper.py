@@ -44,7 +44,7 @@ async def get_reference_list(
   paper = read_paper(paper_id, session)
   if paper is None:
     return ResponseWrapper(status=1, data=None)
-  return ResponseWrapper(data=paper.references)  # TODO: which to return?
+  return ResponseWrapper(data=paper.references)  # TODO: which type will be returned?
 
 
 @router.get('/year', dependencies=[Depends(authenticate_user)])
@@ -88,4 +88,5 @@ async def get_same_category_list(
   papers = read_papers_with_same_category(paper_id, session)
   if papers is None:
     return ResponseWrapper(status=1, data=None)
+  papers.remove(paper_id)
   return ResponseWrapper(data=papers)

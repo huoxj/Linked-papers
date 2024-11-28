@@ -16,5 +16,8 @@ def read_related_papers(paper_id: int, session: Session) -> list[int]:
 
 
 def read_papers_with_same_category(paper_id: int, session: Session) -> list[int]:
-  # TODO
-  return []
+  paper = read_paper(paper_id, session)
+  papers = (session.exec(select(PaperInDB)
+                         .where(PaperInDB.category == paper.category))
+            .all())
+  return [paper.id for paper in papers]
