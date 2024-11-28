@@ -1,11 +1,13 @@
 from fastapi.security import OAuth2PasswordBearer
 
-from app.models.user import UserInfo
+from app.models.user import User
 
 
-def user_to_token(user: UserInfo) -> str:
+def user_to_token(user: User) -> str:
+  # TODO
   return 'fake_token'
 
 
-def token_to_user(token: str) -> UserInfo:
-  return UserInfo(username='fake_user', email='fake@email.com', premium=False)
+def token_to_user(token: str) -> User:
+  # TODO
+  return User(username='fake_user', email='fake@email.com', premium=False)

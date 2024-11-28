@@ -1,10 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Body, HTTPException, Query
+from fastapi import APIRouter, Body
 
 from ..dependencies import SessionDep
 from ..models.misc import ResponseWrapper
-from ..models.user import UserInfoRegister
+from ..models.user import UserRegister
 from ..services.user import create_user, read_user
 from ..utils.authentification import user_to_token
 
@@ -17,7 +17,7 @@ router = APIRouter(
 
 @router.post('/register')
 async def register(
-        user: Annotated[UserInfoRegister, Body()],
+        user: Annotated[UserRegister, Body()],
         session: SessionDep
 ) -> ResponseWrapper:
   if create_user(user, session):

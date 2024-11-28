@@ -1,15 +1,15 @@
 from sqlmodel import Session, select
 
-from app.models.user import UserInfo, UserInfoRegister
-from app.schemas.user import User
+from app.models.user import User, UserRegister
+from app.schemas.user import UserInDB
 from app.utils.encryption import encrypt_password
 
 
 def create_user(
-        user: UserInfoRegister,
+        user: UserRegister,
         session: Session
 ) -> bool:
-  user_in_db = User(
+  user_in_db = UserInDB(
     email=user.email,
     username=user.username,
     premium=user.premium,
@@ -25,8 +25,8 @@ def read_user(
         email: str,
         password: str,
         session: Session
-) -> UserInfo:
+) -> User:
   encrypted_password = encrypt_password(password)
-  return (session.exec(select(User)
-                       .where(User.email == email and User.encrypted_password == encrypted_password))
+  return (session.exec(select(UserInDB)
+                       .where(UserInDB.email == email and UserInDB.encrypted_password == encrypted_password))
           .first())

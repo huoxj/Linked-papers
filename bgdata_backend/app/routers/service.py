@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Query
 from fastapi.params import Depends
 
 from ..models.misc import ResponseWrapper
-from ..models.user import UserInfo
+from ..models.user import User
 from ..dependencies import get_current_user
 
 router = APIRouter(
@@ -18,13 +18,13 @@ router = APIRouter(
 async def search(
         key: Annotated[str, Query()],
         page: Annotated[int, Query(ge=1)],
-        user: Annotated[UserInfo, Depends(get_current_user)]
+        user: Annotated[User, Depends(get_current_user)]
 ) -> ResponseWrapper[dict]:
   raise HTTPException(status_code=500, detail='Unimplemented.')
 
 
 @router.get('/recommend')
 async def recommend(
-        user: Annotated[UserInfo, Depends(get_current_user)]
+        user: Annotated[User, Depends(get_current_user)]
 ) -> ResponseWrapper[list[int]]:
   raise HTTPException(status_code=500, detail='Unimplemented.')

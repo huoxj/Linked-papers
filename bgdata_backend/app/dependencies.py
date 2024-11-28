@@ -1,9 +1,11 @@
 from typing import Annotated
 
 import yaml
-from fastapi.params import Depends
+from fastapi.params import Depends, Header
 from sqlalchemy import create_engine
 from sqlmodel import Session, SQLModel
+
+from app.models.user import User
 
 with open('config/config.yaml') as f:
   mysql_config = yaml.safe_load(f)['mysql']
@@ -26,7 +28,15 @@ def get_session():
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
+def verify_token(token: Annotated[str, Header(alias='token')]):
+  pass
+
+
 def get_current_user():
   # if not current_user, raises an exception to indicate unauthorized
   # otherwise, returns an UserInfo
+  pass
+
+
+def verify_premium(user: Annotated[User, Depends(get_current_user)]):
   pass

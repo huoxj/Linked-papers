@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 
 
-class UserInfo(BaseModel):
+class User(BaseModel):
     email: str
     username: str
     premium: bool
 
 
-class UserInfoRegister(UserInfo):
+class UserRegister(User):
     password: str
