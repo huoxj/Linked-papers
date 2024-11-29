@@ -3,12 +3,14 @@
 import Header from "@/components/Header.vue";
 import {ref} from "vue";
 import {reqLogin} from "@/api/user";
+import router from "@/router";
 
 const email = ref("");
 const password = ref("");
 
 const login = () => {
   reqLogin(email.value, password.value).then(res => {
+        router.push({path: "/"});
         sessionStorage.setItem("username", res.data.username);
         sessionStorage.setItem("token", res.data.token);
         sessionStorage.setItem("isPremium", res.data.premium);

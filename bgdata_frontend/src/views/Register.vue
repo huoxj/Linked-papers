@@ -3,6 +3,7 @@
 import Header from "@/components/Header.vue";
 import {ref} from "vue";
 import {reqRegister} from "@/api/user";
+import router from "@/router";
 
 const email = ref("");
 const username = ref("");
@@ -18,7 +19,8 @@ const features = ref([
 
 const register = () => {
   reqRegister(email.value, username.value, password.value, isPremium.value).then(res => {
-    console.log(res);
+    if (res.status === 200)
+      router.push({path: "/login"});
   });
 }
 
@@ -60,7 +62,7 @@ const repeatPasswordRules = [
       <v-col cols="12" md="5" class="pa-4">
         <v-row align="center">
           <v-col cols="auto">
-            <v-chip color="#C12127" left>
+            <v-chip color="#ffd700" left>
               <v-icon size="x-large" left>mdi-trophy</v-icon>
             </v-chip>
           </v-col>
