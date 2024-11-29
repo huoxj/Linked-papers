@@ -10,10 +10,13 @@ const password = ref("");
 
 const login = () => {
   reqLogin(email.value, password.value).then(res => {
-        router.push({path: "/"});
-        sessionStorage.setItem("username", res.data.username);
-        sessionStorage.setItem("token", res.data.token);
-        sessionStorage.setItem("isPremium", res.data.premium);
+        console.log(res);
+        if (res.status === 200) {
+          router.push({path: "/"});
+          sessionStorage.setItem("isPremium", res.data.data.premium);
+          sessionStorage.setItem("token", res.data.data.token);
+          sessionStorage.setItem("username", res.data.data.username);
+        }
       }
   )
 }

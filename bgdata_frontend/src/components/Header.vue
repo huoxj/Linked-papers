@@ -1,14 +1,18 @@
 <script setup lang="ts">
 
-// const username = sessionStorage.getItem("username");
-const username = "test";
-const isPremium = sessionStorage.getItem("isPremium");
+import {ref} from "vue";
+import router from "@/router";
+
+const username = sessionStorage.getItem("username");
+const isPremium = sessionStorage.getItem("isPremium") === "true";
 
 const logout = () => {
-  sessionStorage.removeItem("username");
+  sessionStorage.setItem("username", "");
   sessionStorage.removeItem("token");
   sessionStorage.removeItem("isPremium");
   router.push({path: "/"});
+  // 刷新界面
+  location.reload();
 }
 
 </script>
@@ -36,10 +40,11 @@ const logout = () => {
         </v-col>
         <v-col v-if="username" md="1" class="col_center">
           <p style="color: #f1f1f1;font-size: x-large">{{ username }}</p>
-          <v-icon v-if="!isPremium" style="color: gold" size="small" left>mdi-trophy</v-icon>
+          <v-icon v-if="isPremium" style="color: gold" size="large" left>mdi-trophy</v-icon>
         </v-col>
-        <v-col v-if="username" md="1" class="col_center">
-          <p class="h4 theme-white underline" @click="logout">Log out</p>
+        <v-col v-if="username" md="1"  class="col_center">
+<!--          <p class="theme-white underline" @click="logout()" style="font-size: x-large" >Log out</p>-->
+          <v-btn  @click="logout()" style="font-size: large;color:#FFFFFF ;background: #C12127;" text="Log out"></v-btn>
         </v-col>
         <v-col md="1"></v-col>
       </v-row>

@@ -60,15 +60,15 @@ function doSearch() {
       </v-row>
     </v-container>
   </div>
-<!--  <v-container width="130vh">-->
-<!--    <v-row style="margin-bottom: 5px">-->
-<!--      <p class="h2 theme-dark">Recommend for you</p>-->
-<!--      <v-divider></v-divider>-->
-<!--    </v-row>-->
-<!--    <v-row justify="center">-->
-<!--      <ResultItem v-for="paperId in recommendIdList" :paper-id="paperId"></ResultItem>-->
-<!--    </v-row>-->
-<!--  </v-container>-->
+  <!--  <v-container width="130vh">-->
+  <!--    <v-row style="margin-bottom: 5px">-->
+  <!--      <p class="h2 theme-dark">Recommend for you</p>-->
+  <!--      <v-divider></v-divider>-->
+  <!--    </v-row>-->
+  <!--    <v-row justify="center">-->
+  <!--      <ResultItem v-for="paperId in recommendIdList" :paper-id="paperId"></ResultItem>-->
+  <!--    </v-row>-->
+  <!--  </v-container>-->
   <div>
 
   </div>

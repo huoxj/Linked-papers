@@ -19,6 +19,7 @@ const features = ref([
 
 const register = () => {
   reqRegister(email.value, username.value, password.value, isPremium.value).then(res => {
+    console.log(res);
     if (res.status === 200)
       router.push({path: "/login"});
   });
