@@ -2,13 +2,18 @@
 
 import Header from "@/components/Header.vue";
 import {ref} from "vue";
+import {reqLogin} from "@/api/user";
 
 const email = ref("");
 const password = ref("");
 
 const login = () => {
-  console.log(email.value);
-  console.log(password.value);
+  reqLogin(email.value, password.value).then(res => {
+        sessionStorage.setItem("username", res.data.username);
+        sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("isPremium", res.data.premium);
+      }
+  )
 }
 
 
