@@ -1,6 +1,6 @@
 FROM docker.io/python:3.12-slim
 
-ENV MYSQL_URL host.docker.internal
+ENV MYSQL_URL mysql-jenkis
 ENV MYSQL_USER root
 ENV MYSQL_ROOT_PASSWORD root
 

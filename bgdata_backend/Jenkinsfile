@@ -4,7 +4,7 @@ pipeline{
         MYSQL_IMAGE = 'dockerpull.com/library/mysql:8.3.0'
         MYSQL_PORT = '3306'
         MYSQL_PASSWORD = 'root'
-        MYSQL_CONTAINER_NAME = 'mysql-jenkis'
+        MYSQL_CONTAINER_NAME = 'mysql-jenkins'
         BACKEND_PORT = '8000'
     }
     stages{
@@ -50,7 +50,7 @@ pipeline{
                         sh 'docker stop linkedpapers'
                         sh 'docker rm linkedpapers'
                     }
-                    sh "docker run -d --name linkedpapers -p 9090:${BACKEND_PORT} bgdata_backend"
+                    sh "docker run -d --name linkedpapers -p 9090:${BACKEND_PORT} --link ${MYSQL_CONTAINER_NAME} bgdata_backend"
                 }
             }
         }
