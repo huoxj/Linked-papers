@@ -1,90 +1,117 @@
-import pymysql
+import gzip
 import os
+import shutil
+
+import pymysql
 import yaml
 
-# 从config.yaml文件中加载配置
-def load_config(config_path):
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
-    return config
+root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+config_path = os.path.join(root_path, 'config/config.yaml')
+data_path = os.path.join(os.path.dirname(root_path), 'data')
+papers_path = os.path.join(data_path, 'papers.csv')
+papers_pred_path = os.path.join(data_path, 'papers_pred.csv')
+similar_papers_path = os.path.join(data_path, 'similar_papers.csv')
 
-# 数据库配置文件路径
-config_path = '..config/config.yaml'
+if not os.path.exists(data_path):
+  print('Please assure that the data directory exists.')
 
-# 加载配置
-config = load_config(config_path)
-db_config = config['mysql']
-db_config['csv_path'] = 'xx/papers.csv'  # CSV文件路径
+# unzip papers.csv.gz
+if not os.path.exists(papers_path):
+  with gzip.open(papers_path + '.gz', 'rb') as f_in:
+    with open(papers_path, 'wb') as f_out:
+      shutil.copyfileobj(f_in, f_out)
 
-# SQL语句
-check_secure_file_priv_sql = "SHOW VARIABLES LIKE 'secure_file_priv';"
-create_table_sql = """
-DROP TABLE IF EXISTS papers;
-CREATE TABLE papers (
-    title VARCHAR(255),
-    abstract TEXT,
-    category TEXT,
-    year VARCHAR(60)
-);
-"""
+if not os.path.exists(papers_pred_path) or not os.path.exists(similar_papers_path):
+  print('Please run predict_category.py and find_similar.py before running this script.')
 
+drop_table_sql = 'DROP TABLE IF EXISTS {}'
 load_data_sql = """
-LOAD DATA INFILE %s
-    INTO TABLE papers
+LOAD DATA LOCAL INFILE "{}"
+    INTO TABLE {}
     FIELDS TERMINATED BY ','
     ENCLOSED BY '"'
     ESCAPED BY '"'
     LINES TERMINATED BY '\n'
     IGNORE 1 ROWS;
 """
+create_index_sql = 'CREATE INDEX {} ON {} ({})'
+
+paper_table_name = 'paperindb'
+similarity_table_name = 'similarityindb'
+
+with open(config_path, 'r') as f:
+  db_config = yaml.safe_load(f)['mysql']
+connection_args = {
+  'user': db_config['user'],
+  'password': db_config['password'],
+  'host': db_config['url'],
+  'port': db_config['port'],
+  'database': db_config['database'],
+  'local_infile': 1
+}
 
 try:
-    # 连接到数据库
-    connection = pymysql.connect(**db_config)
-    cursor = connection.cursor()
-    
-    # 检查secure_file_priv变量
-    cursor.execute(check_secure_file_priv_sql)
-    secure_file_priv = cursor.fetchone()[1]
-    
-    if secure_file_priv:
-        print(f"secure_file_priv is set to {secure_file_priv}")
-    else:
-        print("secure_file_priv is not set.")
-    
-    # 检查CSV文件路径是否在secure_file_priv目录下
-    csv_file_path = db_config['csv_path']
-    if not os.path.isabs(csv_file_path):
-        csv_file_path = os.path.join(os.getcwd(), csv_file_path)
-    
-    if secure_file_priv and csv_file_path.startswith(secure_file_priv):
-        # 执行创建表的SQL语句
-        cursor.execute(create_table_sql)
-        
-        # 提交事务
-        connection.commit()
-        
-        # 执行加载数据的SQL语句
-        cursor.execute(load_data_sql, (f"'{csv_file_path}'",))
-        
-        # 提交事务
-        connection.commit()
-        
-        print("表创建和数据加载完成。")
-    else:
-        print(f"The CSV file path '{csv_file_path}' is not within the allowed directory by secure_file_priv ({secure_file_priv}).")
-        print("Please move the CSV file to a directory within the secure_file_priv path or change the secure_file_priv setting in MySQL.")
-    
+  connection = pymysql.connect(**connection_args)
+  cursor = connection.cursor()
+
+  cursor.execute('SHOW VARIABLES LIKE "secure_file_priv";')
+  secure_file_priv = cursor.fetchone()[1]
+
+  if secure_file_priv:
+    print(f'secure_file_priv is set to {secure_file_priv}')
+  else:
+    print('secure_file_priv is not set.')
+
+  if not (len(secure_file_priv) == 0 or secure_file_priv and papers_path.startswith(secure_file_priv)):
+    print(
+      f'The CSV file path "{papers_path}" is not within the allowed directory by secure_file_priv ({secure_file_priv}).')
+    print(
+      'Please move the CSV file to a directory within the secure_file_priv path or change the secure_file_priv setting in MySQL.')
+  else:
+    cursor.execute(drop_table_sql.format(paper_table_name))
+    cursor.execute(drop_table_sql.format(similarity_table_name))
+
+    cursor.execute(f"""
+      CREATE TABLE {paper_table_name} (
+              id INTEGER NOT NULL AUTO_INCREMENT,
+              abstract VARCHAR(255) NOT NULL,
+              title VARCHAR(255) NOT NULL,
+              year VARCHAR(255) NOT NULL,
+              category VARCHAR(255) NOT NULL,
+              reference_id INTEGER,
+              PRIMARY KEY (id),
+              FOREIGN KEY(reference_id) REFERENCES paperindb (id)
+      );
+    """)
+    cursor.execute(f"""
+      CREATE TABLE {similarity_table_name} (
+          id INTEGER NOT NULL AUTO_INCREMENT,
+          source_id INTEGER NOT NULL,
+          target_id INTEGER NOT NULL,
+          similarity FLOAT NOT NULL,
+          PRIMARY KEY (id)
+      );
+    """)
+
+    cursor.execute(create_index_sql.format(f'ix_{paper_table_name}_abstract', paper_table_name, 'abstract'))
+    cursor.execute(create_index_sql.format(f'ix_{paper_table_name}_title', paper_table_name, 'title'))
+    cursor.execute(create_index_sql.format(f'ix_{paper_table_name}_year', paper_table_name, 'year'))
+    cursor.execute(create_index_sql.format(f'ix_{paper_table_name}_category', paper_table_name, 'category'))
+    cursor.execute(create_index_sql.format(f'ix_{similarity_table_name}_source_id', similarity_table_name, 'source_id'))
+    cursor.execute(create_index_sql.format(f'ix_{similarity_table_name}_target_id', similarity_table_name, 'target_id'))
+    cursor.execute(create_index_sql.format(f'ix_{similarity_table_name}_similarity', similarity_table_name, 'similarity'))
+
+    cursor.execute(load_data_sql.format(papers_path, paper_table_name))
+    cursor.execute(load_data_sql.format(papers_pred_path, paper_table_name))
+    cursor.execute(load_data_sql.format(similar_papers_path, similarity_table_name))
+
+    connection.commit()
+
+    print('Done.')
+  connection.close()
 except pymysql.Error as e:
-    print("数据库错误:", e)
-    
+  print('数据库错误:', e)
 except FileNotFoundError:
-    print("配置文件未找到，请确保配置文件路径正确。")
-    
+  print('配置文件未找到，请确保配置文件路径正确。')
 except yaml.YAMLError as e:
-    print("配置文件格式错误:", e)
-    
-finally:
-    # 关闭数据库连接
-    if connection:
-        connection.close()
+  print('配置文件格式错误:', e)
