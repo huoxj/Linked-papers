@@ -12,9 +12,9 @@ import {reqPaperContentBrief} from "@/api/paper";
 const recommendIdList = ref<number[]>();
 
 // get recommend list
-reqRecommend().then(res => {
-  recommendIdList.value = res.data;
-})
+// reqRecommend().then(res => {
+//   recommendIdList.value = res.data;
+// })
 
 const searchKeywords = ref("");
 
@@ -45,12 +45,12 @@ function doSearch() {
       </v-row>
       <v-row><br><br></v-row>
       <v-row>
-        <v-col md="12" >
+        <v-col md="12">
           <v-text-field
-            placeholder="Search by title or abstract"
-            single-line
-            variant="solo"
-            v-model="searchKeywords"
+              placeholder="Search by title or abstract"
+              single-line
+              variant="solo"
+              v-model="searchKeywords"
           >
             <template v-slot:append>
               <v-btn class="search-button" size="x-large" @click="doSearch">Search</v-btn>
@@ -60,15 +60,15 @@ function doSearch() {
       </v-row>
     </v-container>
   </div>
-  <v-container width="130vh">
-    <v-row style="margin-bottom: 5px">
-      <p class="h2 theme-dark">Recommend for you</p>
-      <v-divider></v-divider>
-    </v-row>
-    <v-row justify="center">
-      <ResultItem v-for="paperId in recommendIdList" :paper-id="paperId"></ResultItem>
-    </v-row>
-  </v-container>
+<!--  <v-container width="130vh">-->
+<!--    <v-row style="margin-bottom: 5px">-->
+<!--      <p class="h2 theme-dark">Recommend for you</p>-->
+<!--      <v-divider></v-divider>-->
+<!--    </v-row>-->
+<!--    <v-row justify="center">-->
+<!--      <ResultItem v-for="paperId in recommendIdList" :paper-id="paperId"></ResultItem>-->
+<!--    </v-row>-->
+<!--  </v-container>-->
   <div>
 
   </div>
@@ -80,10 +80,12 @@ function doSearch() {
   width: 100%;
   height: 45vh;
 }
+
 .search-wrapper {
   width: 140vh;
   height: 30vh;
 }
+
 .search-button {
   background-color: #C12127;
   color: white;
