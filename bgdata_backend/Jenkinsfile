@@ -45,7 +45,7 @@ pipeline{
             steps {
                 script {
                     echo 'Running container...'
-                    def containerExists = sh(script: "docker ps --filter 'name=linkedpapers' -q", returnStdout: true).trim()
+                    def containerExists = sh(script: "docker ps --filter 'name=linkedpapers' -q -a", returnStdout: true).trim()
                     if (containerExists) {
                         sh 'docker stop linkedpapers'
                         sh 'docker rm linkedpapers'
