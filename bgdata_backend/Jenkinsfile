@@ -1,0 +1,58 @@
+pipeline{
+    agent any
+    environment {
+        MYSQL_IMAGE = 'dockerpull.com/library/mysql:8.3.0'
+        MYSQL_PORT = '3306'
+        MYSQL_PASSWORD = 'root'
+        MYSQL_CONTAINER_NAME = 'mysql-jenkis'
+        BACKEND_PORT = '8000'
+    }
+    stages{
+        stage('Start MySQL Container') {
+            steps{
+                script {
+                    def containerExists = sh(script: "docker ps --filter 'name=${MYSQL_CONTAINER_NAME}' -q", returnStdout: true).trim()
+                    if (containerExists) {
+                        echo "MySQL container is already running with ID: ${containerExists}"
+                    } else {
+                        // 启动 MySQL 容器
+                        sh """
+                            docker run -d --name ${MYSQL_CONTAINER_NAME} \
+                            -e MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD} \
+                            -p ${MYSQL_PORT}:${MYSQL_PORT} \
+                            ${MYSQL_IMAGE}
+                        """
+                        echo "MySQL container started"
+                    }
+                }
+            }
+        }
+        stage('Clone repository') {
+            steps {
+                echo 'Cloning repository...'
+                git url: 'git@github.com:huoxj/Linked-papers.git', branch : 'main'
+            }
+        }
+        stage('Build image') {
+            steps {
+                dir('bgdata_backend') {
+                    echo 'Building image...'
+                    sh 'docker build -t bgdata_backend .'
+                }
+            }
+        }
+        stage('Run container') {
+            steps {
+                script {
+                    echo 'Running container...'
+                    def containerExists = sh(script: "docker ps --filter 'name=linkedpapers' -q", returnStdout: true).trim()
+                    if (containerExists) {
+                        sh 'docker stop linkedpapers'
+                        sh 'docker rm linkedpapers'
+                    }
+                    sh "docker run -d --name linkedpapers -p 9090:${BACKEND_PORT} bgdata_backend"
+                }
+            }
+        }
+    }
+}
