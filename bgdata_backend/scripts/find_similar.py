@@ -1,9 +1,15 @@
+import os
+
 import faiss
 import numpy as np
 import pandas as pd
 
 # 读取特征向量矩阵
-feats = pd.read_csv('./feats.csv.gz', compression='gzip', header=None).values.astype(np.float32)
+root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+data_path = os.path.join(os.path.dirname(root_path), 'data')
+csv_path = os.path.join(data_path, 'feats.csv.gz')
+
+feats = pd.read_csv(csv_path, compression='gzip', header=None).values.astype(np.float32)
 
 # 创建FAISS索引
 index = faiss.IndexFlatL2(feats.shape[1])  # 使用L2距离的平面索引
@@ -27,4 +33,5 @@ for i in range(feats.shape[0]):
         results.append([i, I[i][j], D[i][j]])
 
 results_df = pd.DataFrame(results, columns=['论文', '最相似论文', '相似度'])
-results_df.to_csv('similar_papers.csv', index=False)
+result_path = os.path.join(data_path, 'similar_papers.csv')
+results_df.to_csv(result_path, index=False)

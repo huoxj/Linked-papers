@@ -1,7 +1,7 @@
 from sqlmodel import Session, select
 
 from app.models.paper import Paper
-from app.schemas.paper import PaperInDB
+from app.schemas.paper import PaperInDB, SimilarityInDB
 
 
 def read_paper(paper_id: int, session: Session) -> Paper:
@@ -11,8 +11,14 @@ def read_paper(paper_id: int, session: Session) -> Paper:
 
 
 def read_related_papers(paper_id: int, session: Session) -> list[int]:
-  # TODO
-  return []
+  rows = (session.exec(select(SimilarityInDB)
+               .where(SimilarityInDB.source_id == paper_id)).all())
+  # dicts = [{'id': row.target_id, 'similarity': row.similarity} for row in rows]
+  # dicts.sort(key=lambda x: x[1], reverse=True)
+  # return dicts
+  ids = [row.target_id for row in rows]
+  ids.sort(reverse=True)
+  return ids
 
 
 def read_papers_with_same_category(paper_id: int, session: Session) -> list[int]:

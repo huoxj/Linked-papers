@@ -4,11 +4,15 @@ Backend of the Linked Papers project for BDA2024 @NJUSE, running the server on p
 
 ## Setup
 
-Assure your Python is 3.10 or above, then install the dependencies by running:
+Assure your Python is 3.12 or above, then install the dependencies by running:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+To plug in MySQL, you may configurate it in `app/config/config.yaml`.
+
+Prepare your data under `../data/` directory, then run the scripts in `scripts/` to import the data into MySQL automatically. Note that you are supposed to run `load_data.py` after the other ones.
 
 ## Run
 
