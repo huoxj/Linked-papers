@@ -10,6 +10,7 @@ WORKDIR /app
 
 COPY . .
 
+RUN apt-get update && apt-get install -y wget
 
 RUN sed -i "s/password: .*/password: ${MYSQL_ROOT_PASSWORD}/" config/config.yaml
 RUN sed -i "s/url: .*/url: ${MYSQL_URL}/" config/config.yaml
