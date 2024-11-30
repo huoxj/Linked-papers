@@ -3,19 +3,31 @@
 import {ref} from "vue";
 import router from "@/router";
 import type {PaperContent} from "@/utils/types";
-import {reqPaperContentBrief} from "@/api/paper";
+import {
+  reqPaperAbstract,
+  reqPaperCategory,
+  reqPaperContentBrief,
+  reqPaperReference,
+  reqPaperTitle,
+  reqPaperYear
+} from "@/api/paper";
 
 const props = defineProps(['paperId'])
 
+const paperId = ref(props.paperId);
 const paper = ref<PaperContent>({title: "", year: "", category: "", abstract: "", refCount: 0});
 
-reqPaperContentBrief(props.paperId).then(res => {
-  paper.value.title = res[0].data.text;
-  paper.value.abstract = res[1].data.text;
-  paper.value.year = res[2].data.text;
-  paper.value.category = res[3].data.text;
-  paper.value.refCount = res[4].data.length;
-})
+const title = ref<string>("");
+const abstract = ref<string>("");
+const year = ref<string>("");
+const category = ref<string>("");
+const refCount = ref<number>(0);
+
+reqPaperTitle(props.paperId).then(res => { title.value = res.data; })
+reqPaperAbstract(props.paperId).then(res => { abstract.value = res.data; })
+reqPaperYear(props.paperId).then(res => { year.value = res.data; })
+reqPaperCategory(props.paperId).then(res => { category.value = res.data; })
+reqPaperReference(props.paperId).then(res => { refCount.value = res.data.length; })
 
 function toPaper() {
   router.push({

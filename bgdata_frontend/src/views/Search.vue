@@ -29,7 +29,7 @@ function updateList() {
 updateList();
 
 // watch page change
-const onPageChange = watch(page, (newPage) => {
+watch(page, (newPage) => {
   router.push({
     path: "/search",
     query: {

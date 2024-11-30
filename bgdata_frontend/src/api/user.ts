@@ -10,5 +10,5 @@ export const reqLogin = (email: string, password: string) => {
 //   return post<UserInfo>(`${USER_MODULE}/register`, registerInfo);
 // }
 export const reqRegister = (email: string, username: string, password: string, premium: boolean) => {
-    return post<UserInfo>(`${USER_MODULE}/register`, {email, username, password, premium});
+    return post<boolean>(`${USER_MODULE}/register`, {email, username, password, premium});
 }

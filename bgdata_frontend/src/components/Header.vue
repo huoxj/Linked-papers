@@ -44,7 +44,7 @@ const logout = () => {
         </v-col>
         <v-col v-if="username" md="1"  class="col_center">
 <!--          <p class="theme-white underline" @click="logout()" style="font-size: x-large" >Log out</p>-->
-          <v-btn  @click="logout()" style="font-size: large;color:#FFFFFF ;background: #C12127;" text="Log out"></v-btn>
+          <v-btn variant="text"  @click="logout()" style="font-size: large;color:#FFFFFF ;background: #C12127;" text="Log out"></v-btn>
         </v-col>
         <v-col md="1"></v-col>
       </v-row>

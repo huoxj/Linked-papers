@@ -13,14 +13,14 @@ const isPremium = ref(false);
 
 const features = ref([
   {name: 'Search', guest: 'mdi-checkbox-marked', free: 'mdi-checkbox-marked', premium: 'mdi-checkbox-marked'},
-  {name: 'Graph', guest: 'mdi-close', free: 'mdi-checkbox-marked', premium: 'mdi-checkbox-marked'},
-  {name: 'Recommend', guest: 'mdi-close', free: 'mdi-close', premium: 'mdi-checkbox-marked'}
+  {name: 'Related paper', guest: 'mdi-close', free: 'mdi-checkbox-marked', premium: 'mdi-checkbox-marked'},
+  {name: 'Graph', guest: 'mdi-close', free: 'mdi-close', premium: 'mdi-checkbox-marked'}
 ]);
 
 const register = () => {
   reqRegister(email.value, username.value, password.value, isPremium.value).then(res => {
     console.log(res);
-    if (res.status === 200)
+    if (res.status === 0)
       router.push({path: "/login"});
   });
 }
@@ -83,7 +83,7 @@ const repeatPasswordRules = [
             </thead>
             <tbody>
             <tr v-for="item in features" :key="item.name">
-              <td>{{ item.name }}</td>
+              <td >{{ item.name }}</td>
               <td class="text-center theme-red">
                 <v-icon>{{ item.guest }}</v-icon>
               </td>

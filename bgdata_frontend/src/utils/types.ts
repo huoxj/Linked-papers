@@ -11,19 +11,15 @@ export type PaperContent = {
  */
 
 export type UserInfo = {
-  email: string;
-  username?: string;
-  password: string;
-  premium?: boolean;
+  username: string;
+  premium: boolean;
+  token: string;
 }
 
 /**
  * PAPER_MODULE: 论文模块
  */
 
-export type Text = {
-  text: string;
-}
 
 /**
  * SERVICE_MODULE: 服务模块
@@ -32,4 +28,19 @@ export type Text = {
 export type SearchResult = {
   idList: number[];
   totalPage: number;
+}
+
+/**
+ * GRAPH: 图模块
+ */
+
+export type GraphNode = {
+  id: string;
+  name: string;
+  color: string;
+}
+
+export type GraphLine = {
+  from: string;
+  to: string;
 }

@@ -39,11 +39,11 @@ export type Response<T> = {
 }
 
 function get<T>(url: string, params?: {}): Promise<Response<T>> {
-  return service.get(url, {params}).then(res => {return res});
+  return service.get(url, {params}).then(res => {return res.data});
 }
 
 function post<T>(url: string, data?: {}, headers?: {}): Promise<Response<T>> {
-  return service.post(url, data, {headers}).then(res => {return res});
+  return service.post(url, data, {headers}).then(res => {return res.data});
 }
 
 export { get, post }
