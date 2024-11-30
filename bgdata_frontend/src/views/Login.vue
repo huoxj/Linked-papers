@@ -1,12 +1,17 @@
 <script setup lang="ts">
 
 import Header from "@/components/Header.vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {reqLogin} from "@/api/user";
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 const email = ref("");
 const password = ref("");
+
+const route = useRoute();
+const snackbar = ref(false);
+const snackbarMessage = ref("");
 
 const login = () => {
   reqLogin(email.value, password.value).then(res => {
@@ -21,11 +26,25 @@ const login = () => {
   )
 }
 
+watch(
+    () => route.query.message,
+    (newMessage) => {
+      if (newMessage) {
+        snackbarMessage.value = newMessage as string;
+        snackbar.value = true;
+      }
+    },
+    {immediate: true}
+);
+
 
 </script>
 
 <template>
   <Header></Header>
+  <v-snackbar v-model="snackbar" :timeout="1500">
+    {{ snackbarMessage }}
+  </v-snackbar>
   <v-container fill-height>
     <v-row
         justify="center"
@@ -61,7 +80,6 @@ const login = () => {
       </v-col>
     </v-row>
   </v-container>
-
 
 </template>
 
