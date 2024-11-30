@@ -7,7 +7,7 @@ import yaml
 
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 config_path = os.path.join(root_path, 'config/config.yaml')
-data_path = os.path.join(os.path.dirname(root_path), 'data')
+data_path = os.path.join(root_path, 'data')
 papers_path = os.path.join(data_path, 'papers.csv')
 papers_pred_path = os.path.join(data_path, 'papers_pred.csv')
 similar_papers_path = os.path.join(data_path, 'similar_papers.csv')
