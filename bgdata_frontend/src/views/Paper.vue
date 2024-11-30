@@ -12,7 +12,7 @@ import {
   reqPaperReference,
   reqPaperRelated,
   reqPaperSameCategory,
-  reqPaperTitle
+  reqPaperTitle, reqPaperYear
 } from "@/api/paper";
 import {it} from "vuetify/locale";
 
@@ -55,9 +55,9 @@ onMounted(() => {
 const rootPaperId = ref<number>(2);
 const rootPaper = ref<PaperContent>({ title: "",  year: "",  category: "",  abstract: "",  refCount: 0 });
 
-reqPaperAbstract(rootPaperId.value).then(res => {
-  rootPaper.value.abstract = res.data;
-});
+reqPaperAbstract(rootPaperId.value).then(res => { rootPaper.value.abstract = res.data; });
+reqPaperTitle(rootPaperId.value).then(res => { rootPaper.value.title = res.data; });
+reqPaperYear(rootPaperId.value).then(res => { rootPaper.value.year = res.data; });
 
 // root paper relations id list
 const rootReferenceIdList = ref<number[]>([]);

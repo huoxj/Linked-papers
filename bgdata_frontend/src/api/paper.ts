@@ -1,13 +1,12 @@
 import  {get} from "@/utils/request";
 import {PAPER_MODULE} from "@/api/_prefix";
-import type {Text} from "@/utils/types";
 
 export const reqPaperAbstract = (id: number) => {
   return get<string>(`${PAPER_MODULE}/abstract`, {id})
 }
 
 export const reqPaperTitle = (id: number) => {
-  return get<Text>(`${PAPER_MODULE}/title`, {id})
+  return get<string>(`${PAPER_MODULE}/title`, {id})
 }
 
 export const reqPaperReference = (id: number) => {
@@ -15,11 +14,11 @@ export const reqPaperReference = (id: number) => {
 }
 
 export const reqPaperYear = (id: number) => {
-  return get<Text>(`${PAPER_MODULE}/year`, {id})
+  return get<string>(`${PAPER_MODULE}/year`, {id})
 }
 
 export const reqPaperCategory = (id: number) => {
-  return get<Text>(`${PAPER_MODULE}/category`, {id})
+  return get<string>(`${PAPER_MODULE}/category`, {id})
 }
 
 export const reqPaperRelated = (id: number) => {
@@ -27,8 +26,7 @@ export const reqPaperRelated = (id: number) => {
 }
 
 export const reqPaperSameCategory = (id: number) => {
-  //return get<number[]>(`${PAPER_MODULE}/samecategory`, {id})
-  return get<number[]>(`${PAPER_MODULE}/related`, {id})
+  return get<number[]>(`${PAPER_MODULE}/samecategory`, {id})
 }
 
 export const reqPaperContentBrief = (id: number) => {

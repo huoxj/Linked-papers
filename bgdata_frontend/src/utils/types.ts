@@ -20,9 +20,6 @@ export type UserInfo = {
  * PAPER_MODULE: 论文模块
  */
 
-export type Text = {
-  text: string;
-}
 
 /**
  * SERVICE_MODULE: 服务模块

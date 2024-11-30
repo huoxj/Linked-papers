@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import {ref} from "vue";
+import {reqPaperAbstract, reqPaperCategory, reqPaperReference, reqPaperTitle, reqPaperYear} from "@/api/paper";
 
 const props = defineProps(['paperId'])
 
-const title = ref("Evasion Attacks against Machine Learning at Test Time")
-const year = ref(2013)
-const category = ref("cs.CR")
-const references = ref(10)
-const text = ref("In security-sensitive applications, the success of machine learning depends on a thorough vetting of their resistance to adversarial data. In one pertinent, well-motivated attack scenario, an adversary may attempt to evade a deployed system at test time by carefully manipulating attack samples. In this work, we present a simple but effective gradient-based approach that can be exploited to systemati， In this work, we present a simple but effective gradient-based approach that can be exploited to systemati")
+const title = ref<string>("");
+const abstract = ref<string>("");
+const year = ref<string>("");
+const category = ref<string>("");
+const refCount = ref<number>(0);
 
+reqPaperTitle(props.paperId).then(res => { title.value = res.data; })
+reqPaperAbstract(props.paperId).then(res => { abstract.value = res.data; })
+reqPaperYear(props.paperId).then(res => { year.value = res.data; })
+reqPaperCategory(props.paperId).then(res => { category.value = res.data; })
+reqPaperReference(props.paperId).then(res => { refCount.value = res.data.length; })
 </script>
 
 <template>
@@ -23,7 +29,7 @@ const text = ref("In security-sensitive applications, the success of machine lea
         <v-row no-gutters>
           <v-col md="3" class="theme-gray h4">{{year}}</v-col>
           <v-col md="3" class="theme-gray h4">{{category}}</v-col>
-          <v-col md="6" class="theme-gray h4">{{references}} References</v-col>
+          <v-col md="6" class="theme-gray h4">{{refCount}} References</v-col>
         </v-row>
       </v-container>
     </template>
