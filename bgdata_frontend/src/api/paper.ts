@@ -3,7 +3,7 @@ import {PAPER_MODULE} from "@/api/_prefix";
 import type {Text} from "@/utils/types";
 
 export const reqPaperAbstract = (id: number) => {
-  return get<Text>(`${PAPER_MODULE}/abstract`, {id})
+  return get<string>(`${PAPER_MODULE}/abstract`, {id})
 }
 
 export const reqPaperTitle = (id: number) => {
@@ -27,7 +27,8 @@ export const reqPaperRelated = (id: number) => {
 }
 
 export const reqPaperSameCategory = (id: number) => {
-  return get<number[]>(`${PAPER_MODULE}/sameCategory`, {id})
+  //return get<number[]>(`${PAPER_MODULE}/samecategory`, {id})
+  return get<number[]>(`${PAPER_MODULE}/related`, {id})
 }
 
 export const reqPaperContentBrief = (id: number) => {

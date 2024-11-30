@@ -11,10 +11,9 @@ export type PaperContent = {
  */
 
 export type UserInfo = {
-  email: string;
-  username?: string;
-  password: string;
-  premium?: boolean;
+  username: string;
+  premium: boolean;
+  token: string;
 }
 
 /**

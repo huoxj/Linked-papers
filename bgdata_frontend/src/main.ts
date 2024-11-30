@@ -16,7 +16,7 @@ const vuetify = createVuetify({
   directives,
 })
 
-axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.baseURL = 'http://192.168.1.100:9090'
 axios.defaults.timeout = 30000
 
 const app = createApp(App)

@@ -7,6 +7,7 @@ import DrawerItem from "@/components/DrawerItem.vue";
 import type {GraphLine, GraphNode, PaperContent} from "@/utils/types";
 import router from "@/router";
 import {
+  reqPaperAbstract,
   reqPaperContentBrief,
   reqPaperReference,
   reqPaperRelated,
@@ -51,17 +52,12 @@ onMounted(() => {
 })
 
 // root paper info
-const rootPaperId = ref<number>(1);
+const rootPaperId = ref<number>(2);
 const rootPaper = ref<PaperContent>({ title: "",  year: "",  category: "",  abstract: "",  refCount: 0 });
 
-reqPaperContentBrief(rootPaperId.value).then(res => {
-  rootPaper.value.title = res[0].data.text;
-  rootPaper.value.abstract = res[1].data.text;
-  rootPaper.value.year = res[2].data.text;
-  rootPaper.value.category = res[3].data.text;
-  rootPaper.value.refCount = res[4].data.length;
-})
-
+reqPaperAbstract(rootPaperId.value).then(res => {
+  rootPaper.value.abstract = res.data;
+});
 
 // root paper relations id list
 const rootReferenceIdList = ref<number[]>([]);
