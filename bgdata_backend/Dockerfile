@@ -13,4 +13,5 @@ RUN sed -i "s/url: .*/url: ${MYSQL_URL}/" config/config.yaml
 
 RUN pip install --no-cache-dir -r requirements_runtime.txt
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
