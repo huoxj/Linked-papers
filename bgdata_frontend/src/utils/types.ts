@@ -33,3 +33,18 @@ export type SearchResult = {
   idList: number[];
   totalPage: number;
 }
+
+/**
+ * GRAPH: 图模块
+ */
+
+export type GraphNode = {
+  id: string;
+  name: string;
+  color: string;
+}
+
+export type GraphLine = {
+  from: string;
+  to: string;
+}

@@ -3,31 +3,31 @@ import {PAPER_MODULE} from "@/api/_prefix";
 import type {Text} from "@/utils/types";
 
 export const reqPaperAbstract = (id: number) => {
-  return get<Text>(`${PAPER_MODULE}/abstract`, {params: {id}})
+  return get<Text>(`${PAPER_MODULE}/abstract`, {id})
 }
 
 export const reqPaperTitle = (id: number) => {
-  return get<Text>(`${PAPER_MODULE}/title`, {params: {id}})
+  return get<Text>(`${PAPER_MODULE}/title`, {id})
 }
 
 export const reqPaperReference = (id: number) => {
-  return get<number[]>(`${PAPER_MODULE}/reference`, {params: {id}})
+  return get<number[]>(`${PAPER_MODULE}/reference`, {id})
 }
 
 export const reqPaperYear = (id: number) => {
-  return get<Text>(`${PAPER_MODULE}/year`, {params: {id}})
+  return get<Text>(`${PAPER_MODULE}/year`, {id})
 }
 
 export const reqPaperCategory = (id: number) => {
-  return get<Text>(`${PAPER_MODULE}/category`, {params: {id}})
+  return get<Text>(`${PAPER_MODULE}/category`, {id})
 }
 
 export const reqPaperRelated = (id: number) => {
-  return get<number[]>(`${PAPER_MODULE}/related`, {params: {id}})
+  return get<number[]>(`${PAPER_MODULE}/related`, {id})
 }
 
 export const reqPaperSameCategory = (id: number) => {
-  return get<number[]>(`${PAPER_MODULE}/sameCategory`, {params: {id}})
+  return get<number[]>(`${PAPER_MODULE}/sameCategory`, {id})
 }
 
 export const reqPaperContentBrief = (id: number) => {

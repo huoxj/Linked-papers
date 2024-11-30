@@ -4,9 +4,16 @@ import Header from "@/components/Header.vue";
 import RelationGraph, {type RGJsonData, type RGOptions} from "relation-graph-vue3";
 import {onMounted, ref} from "vue";
 import DrawerItem from "@/components/DrawerItem.vue";
-import type {PaperContent} from "@/utils/types";
+import type {GraphLine, GraphNode, PaperContent} from "@/utils/types";
 import router from "@/router";
-import {reqPaperContentBrief} from "@/api/paper";
+import {
+  reqPaperContentBrief,
+  reqPaperReference,
+  reqPaperRelated,
+  reqPaperSameCategory,
+  reqPaperTitle
+} from "@/api/paper";
+import {it} from "vuetify/locale";
 
 // Graph
 const jsonData:RGJsonData = {
@@ -24,8 +31,7 @@ const jsonData:RGJsonData = {
     { from: 'N3', to: 'N4', text: '分享444' },
     { from: 'N3', to: 'N5', text: '分享555' },
     { from: 'N3', to: 'N6', text: '分享666' },
-    { from: 'N3', to: 'N7', text: '分享777' },
-    { from: 'N9', to: 'N4', text: '分享x' }
+    { from: 'N3', to: 'N7', text: '分享777' }
   ],
 }
 const options:RGOptions = {
@@ -36,6 +42,8 @@ const options:RGOptions = {
   toolBarPositionV: 'bottom',
 }
 
+const detailTab = ref<string>("abstract");
+
 const graphRef = ref<RelationGraph>();
 
 onMounted(() => {
@@ -43,11 +51,8 @@ onMounted(() => {
 })
 
 // root paper info
-const rootPaperId = ref<number>(Number(router.currentRoute.value.params.id));
+const rootPaperId = ref<number>(1);
 const rootPaper = ref<PaperContent>({ title: "",  year: "",  category: "",  abstract: "",  refCount: 0 });
-const rootReferenceIdList = ref<number[]>([]);
-const rootFieldPaperIdList = ref<number[]>([]);
-const rootRelatedIdList = ref<number[]>([]);
 
 reqPaperContentBrief(rootPaperId.value).then(res => {
   rootPaper.value.title = res[0].data.text;
@@ -57,8 +62,41 @@ reqPaperContentBrief(rootPaperId.value).then(res => {
   rootPaper.value.refCount = res[4].data.length;
 })
 
-// Tabs
-const detailTab = ref('abstract');
+
+// root paper relations id list
+const rootReferenceIdList = ref<number[]>([]);
+const rootSameCategoryIdList = ref<number[]>([]);
+const rootRelatedIdList = ref<number[]>([]);
+
+reqPaperReference(rootPaperId.value).then(res => {
+  rootReferenceIdList.value = res.data;
+})
+
+reqPaperSameCategory(rootPaperId.value).then(res => {
+  rootSameCategoryIdList.value = res.data;
+})
+
+reqPaperRelated(rootPaperId.value).then(res => {
+  rootRelatedIdList.value = res.data;
+})
+
+/*
+  * GRAPH
+ */
+
+// graph data
+
+let nodes:GraphNode[] = [];
+let lines:GraphLine[] = [];
+
+
+
+const graphData:RGJsonData = {
+  rootId: rootPaperId.value.toString(),
+  nodes: nodes,
+  lines: lines,
+}
+
 
 </script>
 
@@ -81,13 +119,13 @@ const detailTab = ref('abstract');
       color="#f1f1f1"
     >
       <v-expansion-panels multiple variant="accordion">
-        <v-expansion-panel>
+        <v-expansion-panel >
           <template v-slot:title>
             <p class="h2 theme-red">References</p>
           </template>
           <template v-slot:text>
             <v-divider></v-divider>
-            <DrawerItem v-for="item in [1,2,3]"></DrawerItem>
+            <DrawerItem v-for="item in rootReferenceIdList" :paper-id="item"></DrawerItem>
           </template>
         </v-expansion-panel>
         <v-expansion-panel>
@@ -96,7 +134,7 @@ const detailTab = ref('abstract');
           </template>
           <template v-slot:text>
             <v-divider></v-divider>
-            <DrawerItem v-for="item in [1,2,3]"></DrawerItem>
+            <DrawerItem v-for="item in rootSameCategoryIdList" :paper-id="item"></DrawerItem>
           </template>
         </v-expansion-panel>
         <v-expansion-panel>
@@ -105,7 +143,7 @@ const detailTab = ref('abstract');
           </template>
           <template v-slot:text>
             <v-divider></v-divider>
-            <DrawerItem v-for="item in [1,2,3]"></DrawerItem>
+            <DrawerItem v-for="item in rootRelatedIdList" :paper-id="item"></DrawerItem>
           </template>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -125,7 +163,7 @@ const detailTab = ref('abstract');
       </v-tabs>
       <v-tabs-window v-model="detailTab">
         <v-tabs-window-item value="abstract">
-          <p class="theme-dark text-body" style="padding: 15px">{{abstract}}</p>
+          <p class="theme-dark text-body" style="padding: 15px">{{rootPaper.abstract}}</p>
         </v-tabs-window-item>
         <v-tabs-window-item value="reference">
           <DrawerItem v-for="item in [1,2,3]"></DrawerItem>

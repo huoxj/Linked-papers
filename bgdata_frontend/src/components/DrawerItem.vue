@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {ref} from "vue";
 
+const props = defineProps(['paperId'])
+
 const title = ref("Evasion Attacks against Machine Learning at Test Time")
 const year = ref(2013)
 const category = ref("cs.CR")
