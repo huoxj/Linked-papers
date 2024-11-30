@@ -12,7 +12,13 @@ pip install -r requirements.txt
 
 To plug in MySQL, you may configurate it in `app/config/config.yaml`.
 
-Prepare your data under `../data/` directory, then run the scripts in `scripts/` to import the data into MySQL automatically. Note that you are supposed to run `load_data.py` after the other ones.
+To get all data ready, you may need to:
+1. prepare your data under `data/` directory,
+2. run `find_similar.py`, `predict_category.py` under `scripts/` directory,
+3. run `load_data.py` under `scripts/` directory, and
+4. run `generate_embedding.py` under `scripts/` directory.
+
+Executing some of them may take a while.
 
 ## Run
 
