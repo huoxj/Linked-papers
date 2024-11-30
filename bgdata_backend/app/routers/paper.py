@@ -43,7 +43,7 @@ async def get_reference_list(
   paper = read_paper(paper_id, session)
   if paper is None:
     return ResponseWrapper(status=1, data=None)
-  return ResponseWrapper(data=paper.references)  # TODO: which type will be returned?
+  return ResponseWrapper(data=[target.id for target in paper.references])
 
 
 @router.get('/year', dependencies=[Depends(authenticate_user)])

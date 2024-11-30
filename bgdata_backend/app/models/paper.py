@@ -2,8 +2,9 @@ from pydantic import BaseModel
 
 
 class Paper(BaseModel):
+  id: int
   abstract: str
   title: str
-  references: list[int]
+  references: list['Paper']
   year: str
   category: str

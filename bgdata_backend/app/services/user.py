@@ -29,4 +29,7 @@ def read_user(
   user = (session.exec(select(UserInDB)
                        .where(hash_string(email) == UserInDB.email_hash))
           .first())
-  return UserRegister(email=email, username=user.username, premium=user.premium, password=user.encrypted_password)
+  if user is None:
+    return None
+  return UserRegister(id=user.id, email=email, username=user.username,
+                      premium=user.premium, password=user.encrypted_password)
