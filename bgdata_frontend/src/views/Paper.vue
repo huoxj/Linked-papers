@@ -2,7 +2,7 @@
 
 import Header from "@/components/Header.vue";
 import RelationGraph, {type RGJsonData, type RGOptions} from "relation-graph-vue3";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import DrawerItem from "@/components/DrawerItem.vue";
 import type {GraphLine, GraphNode, PaperContent} from "@/utils/types";
 import router from "@/router";
@@ -17,25 +17,25 @@ import {
 import {it} from "vuetify/locale";
 
 // Graph
-const jsonData:RGJsonData = {
+const jsonData: RGJsonData = {
   rootId: 'N3',
   nodes: [
-    { id: 'N4', text: '十4' },
-    { id: 'N5', text: '十5' },
-    { id: 'N6', text: '十6' },
-    { id: 'N7', text: '十7' },
-    { id: 'N3', text: '十三' },
-    { id: 'N9', text: '152****3393' },
+    {id: 'N4', text: '十4'},
+    {id: 'N5', text: '十5'},
+    {id: 'N6', text: '十6'},
+    {id: 'N7', text: '十7'},
+    {id: 'N3', text: '十三'},
+    {id: 'N9', text: '152****3393'},
   ],
   lines: [
-    { from: 'N3', to: 'N9', text: '分享' },
-    { from: 'N3', to: 'N4', text: '分享444' },
-    { from: 'N3', to: 'N5', text: '分享555' },
-    { from: 'N3', to: 'N6', text: '分享666' },
-    { from: 'N3', to: 'N7', text: '分享777' }
+    {from: 'N3', to: 'N9', text: '分享'},
+    {from: 'N3', to: 'N4', text: '分享444'},
+    {from: 'N3', to: 'N5', text: '分享555'},
+    {from: 'N3', to: 'N6', text: '分享666'},
+    {from: 'N3', to: 'N7', text: '分享777'}
   ],
 }
-const options:RGOptions = {
+const options: RGOptions = {
   defaultExpandHolderPosition: 'bottom',
   defaultLineShape: 1,
   toolBarDirection: 'h',
@@ -53,7 +53,7 @@ onMounted(() => {
 
 // root paper info
 const rootPaperId = ref<number>(2);
-const rootPaper = ref<PaperContent>({ title: "",  year: "",  category: "",  abstract: "",  refCount: 0 });
+const rootPaper = ref<PaperContent>({title: "", year: "", category: "", abstract: "", refCount: 0});
 
 reqPaperAbstract(rootPaperId.value).then(res => { rootPaper.value.abstract = res.data; });
 reqPaperTitle(rootPaperId.value).then(res => { rootPaper.value.title = res.data; });
@@ -82,40 +82,56 @@ reqPaperRelated(rootPaperId.value).then(res => {
 
 // graph data
 
-let nodes:GraphNode[] = [];
-let lines:GraphLine[] = [];
+let nodes: GraphNode[] = [];
+let lines: GraphLine[] = [];
 
 
-
-const graphData:RGJsonData = {
+const graphData: RGJsonData = {
   rootId: rootPaperId.value.toString(),
   nodes: nodes,
   lines: lines,
 }
 
+const isPremium = sessionStorage.getItem("isPremium") === "true";
+const snackbar = ref(false);
+const snackbarMessage = ref("You need to be a premium user to view the full content");
+
+watch(
+    () => isPremium,
+    (newValue) => {
+      if (!newValue) {
+        snackbarMessage.value = "You need a premium account to view this content.";
+        snackbar.value = true;
+      }
+    },
+    { immediate: true }
+);
 
 </script>
 
 <template>
   <v-app>
     <Header></Header>
-
-    <div class="graph-wrapper">
-      <RelationGraph ref="graphRef" :options="options">
-        <template #node="{node}">
-          <div style="padding-top:20px;">{{node.text}}</div>
-        </template>
-      </RelationGraph>
+    <v-snackbar v-model="snackbar" :timeout="3000" top>
+      {{ snackbarMessage }}
+    </v-snackbar>
+    <div :class="{'blur-overlay':!isPremium}">
+      <div class="graph-wrapper">
+        <RelationGraph ref="graphRef" :options="options">
+          <template #node="{node}">
+            <div style="padding-top:20px;">{{ node.text }}</div>
+          </template>
+        </RelationGraph>
+      </div>
     </div>
-
     <!-- Left drawer -->
     <v-navigation-drawer
-      class="drawer-style"
-      width="400"
-      color="#f1f1f1"
+        class="drawer-style"
+        width="400"
+        color="#f1f1f1"
     >
       <v-expansion-panels multiple variant="accordion">
-        <v-expansion-panel >
+        <v-expansion-panel>
           <template v-slot:title>
             <p class="h2 theme-red">References</p>
           </template>
@@ -147,10 +163,10 @@ const graphData:RGJsonData = {
 
     <!-- Right drawer -->
     <v-navigation-drawer
-      class="drawer-style"
-      width="500"
-      location="right"
-      color="#f1f1f1"
+        class="drawer-style"
+        width="500"
+        location="right"
+        color="#f1f1f1"
     >
       <v-tabs v-model="detailTab" grow bg-color="#FFFFFF" slider-color="#2A333C">
         <v-tab value="abstract">Abstract</v-tab>
@@ -159,7 +175,7 @@ const graphData:RGJsonData = {
       </v-tabs>
       <v-tabs-window v-model="detailTab">
         <v-tabs-window-item value="abstract">
-          <p class="theme-dark text-body" style="padding: 15px">{{rootPaper.abstract}}</p>
+          <p class="theme-dark text-body" style="padding: 15px">{{ rootPaper.abstract }}</p>
         </v-tabs-window-item>
         <v-tabs-window-item value="reference">
           <DrawerItem v-for="item in [1,2,3]"></DrawerItem>
@@ -178,9 +194,26 @@ const graphData:RGJsonData = {
   margin-top: 70px;
   max-height: calc(100vh - 70px);
 }
+
 .graph-wrapper {
   width: 100%;
   height: calc(100vh - 78px);
   padding: 0;
+}
+
+.blur-overlay {
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.overlay-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
 }
 </style>
