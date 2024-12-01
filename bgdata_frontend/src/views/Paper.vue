@@ -7,8 +7,6 @@ import DrawerItem from "@/components/DrawerItem.vue";
 import type {GraphLine, GraphNode, PaperContent} from "@/utils/types";
 import router from "@/router";
 import {
-  reqPaperAbstract,
-  reqPaperContentBrief,
   reqPaperReference,
   reqPaperRelated,
   reqPaperSameCategory,
