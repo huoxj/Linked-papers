@@ -1,9 +1,10 @@
 export type PaperContent = {
-  title: string;
-  abstract: string;
-  year: string;
-  category: string;
-  refCount: number;
+    id: number;
+    title: string;
+    abstract: string;
+    year: string;
+    category: string;
+    refCount: number;
 }
 
 /**
@@ -11,23 +12,30 @@ export type PaperContent = {
  */
 
 export type UserInfo = {
-  username: string;
-  premium: boolean;
-  token: string;
+    username: string;
+    premium: boolean;
+    token: string;
 }
 
 /**
  * PAPER_MODULE: 论文模块
  */
-
+// export type PaperInfo = {
+//     id: number,
+//     title: string,
+//     abstract: string,
+//     year: string,
+//     category: string,
+//     refCount: number,
+// }
 
 /**
  * SERVICE_MODULE: 服务模块
  */
 
 export type SearchResult = {
-  idList: number[];
-  totalPage: number;
+    idList: number[];
+    totalPage: number;
 }
 
 /**
@@ -35,12 +43,12 @@ export type SearchResult = {
  */
 
 export type GraphNode = {
-  id: string;
-  name: string;
-  color: string;
+    id: string;
+    name: string;
+    color: string;
 }
 
 export type GraphLine = {
-  from: string;
-  to: string;
+    from: string;
+    to: string;
 }
