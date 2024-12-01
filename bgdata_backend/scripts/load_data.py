@@ -10,8 +10,7 @@ from tqdm import tqdm
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 config_path = os.path.join(root_path, 'config/config.yaml')
 data_path = os.path.join(root_path, 'data')
-papers_path = os.path.join(data_path, 'papers.csv')
-papers_pred_path = os.path.join(data_path, 'papers_pred.csv')
+papers_path = os.path.join(data_path, 'papers_pred.csv')
 similar_papers_path = os.path.join(data_path, 'similar_papers.csv')
 edges_path = os.path.join(data_path, 'edges.csv')
 
@@ -30,7 +29,7 @@ def prepare_source_data():
   unzip_gz(papers_path)
   unzip_gz(edges_path)
 
-  if not os.path.exists(papers_pred_path) or not os.path.exists(similar_papers_path):
+  if not os.path.exists(papers_path) or not os.path.exists(similar_papers_path):
     raise ValueError('Please run predict_category.py and find_similar.py before running this script.')
 
 
@@ -106,9 +105,6 @@ STMTS = [
 
   # load data from .csv files
   f'{LOAD_DATA_STMT.format(papers_path, PAPER_TABLE_NAME)}\n'
-  f'(title, abstract, category, year)',
-
-  f'{LOAD_DATA_STMT.format(papers_pred_path, PAPER_TABLE_NAME)}\n'
   f'(title, abstract, category, year)',
 
   f'{LOAD_DATA_STMT.format(similar_papers_path, SIMILARITY_TABLE_NAME)}\n'
