@@ -1,9 +1,9 @@
 import {get} from "@/utils/request";
 import {PAPER_MODULE} from "@/api/_prefix";
-import {PaperContent} from "@/utils/types";
+import type {PaperContent} from "@/utils/types";
 
 export const reqPaperInfo = (id: number) => {
-    return get<PaperContent>(`${PAPER_MODULE}/paper/info`, {id})
+    return get<PaperContent>(`${PAPER_MODULE}/info`, {id})
 }
 
 // export const reqPaperAbstract = (id: number) => {
@@ -35,11 +35,11 @@ export const reqPaperSameCategory = (id: number) => {
     return get<number[]>(`${PAPER_MODULE}/samecategory`, {id})
 }
 
-export const reqPaperContentBrief = (id: number) => {
-    const reqTitle = reqPaperTitle(id),
-        reqAbstract = reqPaperAbstract(id),
-        reqYear = reqPaperYear(id),
-        reqCategory = reqPaperCategory(id),
-        reqRefCount = reqPaperReference(id);
-    return Promise.all([reqTitle, reqAbstract, reqYear, reqCategory, reqRefCount])
-}
+// export const reqPaperContentBrief = (id: number) => {
+//     const reqTitle = reqPaperTitle(id),
+//         reqAbstract = reqPaperAbstract(id),
+//         reqYear = reqPaperYear(id),
+//         reqCategory = reqPaperCategory(id),
+//         reqRefCount = reqPaperReference(id);
+//     return Promise.all([reqTitle, reqAbstract, reqYear, reqCategory, reqRefCount])
+// }

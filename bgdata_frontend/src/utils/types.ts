@@ -7,6 +7,16 @@ export type PaperContent = {
     refCount: number;
 }
 
+export const EmptyPaperContent: PaperContent = {
+    id: 0,
+    title: "",
+    abstract: "",
+    year: "",
+    category: "",
+    refCount: 0
+
+}
+
 /**
  * USER_MODULE: 用户模块
  */
@@ -44,8 +54,9 @@ export type SearchResult = {
 
 export type GraphNode = {
     id: string;
-    name: string;
-    color: string;
+    data: PaperContent;
+    expandHolderPosition: string;
+    expanded: boolean;
 }
 
 export type GraphLine = {
