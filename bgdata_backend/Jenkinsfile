@@ -50,7 +50,12 @@ pipeline{
                         sh 'docker stop linkedpapers'
                         sh 'docker rm linkedpapers'
                     }
-                    sh "docker run -d --name linkedpapers -p 9090:${BACKEND_PORT} --link ${MYSQL_CONTAINER_NAME} bgdata_backend"
+                    sh "docker run -d \
+                    --name linkedpapers -\
+                    p 9090:${BACKEND_PORT} \
+                    --link ${MYSQL_CONTAINER_NAME} \
+                    -v /home/runz/temp/data:/app/data \
+                    bgdata_backend"
                 }
             }
         }
