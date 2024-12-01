@@ -23,12 +23,13 @@ def preprocess_text(text):
 
 
 def train_word2vec_model():
-  papers['combined_text'] = papers['title'] + ' ' + papers['abstract']
+  title_weight=10
+  papers['combined_text'] = (papers['title'] + ' ')*title_weight + papers['abstract']
   papers['processed_text'] = papers['combined_text'].apply(preprocess_text)
 
   sentences = papers['processed_text'].tolist()
 
-  model = Word2Vec(sentences, vector_size=128, window=5, min_count=1, sg=1, workers=4)
+  model = Word2Vec(sentences, vector_size=128, window=5, min_count=1 , sg=1, workers=4,epochs=3,cbow_mean=1)
 
   model.save(model_path)
 
