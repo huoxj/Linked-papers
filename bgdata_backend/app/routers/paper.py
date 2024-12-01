@@ -105,5 +105,6 @@ async def get_same_category_list(
   papers = read_papers_with_same_category(paper_id, session)
   if papers is None:
     return ResponseWrapper(status=1, data=None)
-  papers.remove(paper_id)
+  if paper_id in papers:
+    papers.remove(paper_id)
   return ResponseWrapper(data=papers)
