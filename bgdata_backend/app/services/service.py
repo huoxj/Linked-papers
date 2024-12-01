@@ -10,11 +10,11 @@ def search_with_key(key: str, page: int) -> dict:
   with open('config/config.yaml', 'r') as f:
     page_size = yaml.safe_load(f)['search']['page_size']
   num_page = (len(ids) + page_size - 1) // page_size
-  if page >= num_page:
+  if page > num_page:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                         detail='Page out of range.')
   return {
-    'idList': ids[page * page_size: (page + 1) * page_size],
+    'idList': ids[(page - 1) * page_size: page * page_size],
     'totalPage': num_page
   }
 
