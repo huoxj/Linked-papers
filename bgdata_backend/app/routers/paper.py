@@ -13,7 +13,25 @@ router = APIRouter(
 )
 
 
-@router.get('/abstract', dependencies=[Depends(authenticate_user)])
+@router.get('/info', dependencies=[Depends(authenticate_user)])
+async def get_info(
+        paper_id: Annotated[int, Query(alias='id')],
+        session: Annotated[Session, Depends(get_session)]
+) -> ResponseWrapper[dict]:
+  paper = read_paper(paper_id, session)
+  if paper is None:
+    return ResponseWrapper(status=1, data=None)
+  return ResponseWrapper(data={
+    'id': paper.id,
+    'title': paper.title,
+    'abstract': paper.abstract,
+    'category': paper.category,
+    'year': paper.year.strip(),
+    'refCount': len(paper.references),
+  })
+
+
+@router.get('/abstract', dependencies=[Depends(authenticate_user)], deprecated=True)
 async def get_abstract(
         paper_id: Annotated[int, Query(alias='id')],
         session: Annotated[Session, Depends(get_session)]
@@ -24,7 +42,7 @@ async def get_abstract(
   return ResponseWrapper(data=paper.abstract)
 
 
-@router.get('/title', dependencies=[Depends(authenticate_user)])
+@router.get('/title', dependencies=[Depends(authenticate_user)], deprecated=True)
 async def get_title(
         paper_id: Annotated[int, Query(alias='id')],
         session: Annotated[Session, Depends(get_session)]
@@ -46,7 +64,7 @@ async def get_reference_list(
   return ResponseWrapper(data=[target.id for target in paper.references])
 
 
-@router.get('/year', dependencies=[Depends(authenticate_user)])
+@router.get('/year', dependencies=[Depends(authenticate_user)], deprecated=True)
 async def get_year(
         paper_id: Annotated[int, Query(alias='id')],
         session: Annotated[Session, Depends(get_session)]
@@ -57,7 +75,7 @@ async def get_year(
   return ResponseWrapper(data=paper.year)
 
 
-@router.get('/category', dependencies=[Depends(authenticate_user)])
+@router.get('/category', dependencies=[Depends(authenticate_user)], deprecated=True)
 async def get_category(
         paper_id: Annotated[int, Query(alias='id')],
         session: Annotated[Session, Depends(get_session)]
