@@ -38,12 +38,12 @@ const logout = () => {
             <p class="h4 theme-white underline">Register for FREE</p>
           </router-link>
         </v-col>
-        <v-col v-if="username" md="1" class="col_center">
-          <p style="color: #f1f1f1;font-size: x-large">{{ username }}</p>
-          <v-icon v-if="isPremium" style="color: gold" size="large" left>mdi-trophy</v-icon>
+        <v-col v-if="username" md="2" class="col_center" style="justify-content: right">
+          <p class="h3 theme-white"># {{ username }} &nbsp</p>
+          <v-icon v-if="isPremium" style="color: gold" size="small" left>mdi-trophy</v-icon>
         </v-col>
-        <v-col v-if="username" md="1"  class="col_center">
-          <v-btn variant="text"  @click="logout()" style="font-size: large;color:#FFFFFF ;background: #C12127;" text="Log out"></v-btn>
+        <v-col v-if="username" md="2"  class="col_center">
+          <button @click="logout" class="h4 theme-white underline">Log out</button>
         </v-col>
         <v-col md="1"></v-col>
       </v-row>
