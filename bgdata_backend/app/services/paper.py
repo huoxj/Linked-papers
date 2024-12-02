@@ -4,13 +4,19 @@ from app.models.paper import Paper
 from app.schemas.paper import PaperInDB, SimilarityInDB
 
 
-def read_paper(paper_id: int, session: Session) -> Paper:
+def read_paper(
+        paper_id: int,
+        session: Session
+) -> PaperInDB | None:
   return (session.exec(select(PaperInDB)
                        .where(PaperInDB.id == paper_id))
           .first())
 
 
-def read_related_papers(paper_id: int, session: Session) -> list[int]:
+def read_related_papers(
+        paper_id: int,
+        session: Session
+) -> list[int]:
   rows = (session.exec(select(SimilarityInDB)
                .where(SimilarityInDB.source_id == paper_id)).all())
   # dicts = [{'id': row.target_id, 'similarity': row.similarity} for row in rows]

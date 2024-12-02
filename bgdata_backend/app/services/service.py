@@ -5,7 +5,10 @@ from app.models.user import User
 from app.utils.search_engine import search
 
 
-def search_with_key(key: str, page: int) -> dict:
+def search_with_key(
+        key: str,
+        page: int
+) -> dict:
   ids = search(key)
   with open('config/config.yaml', 'r') as f:
     page_size = yaml.safe_load(f)['search']['page_size']
@@ -19,6 +22,8 @@ def search_with_key(key: str, page: int) -> dict:
   }
 
 
-def recommend_for_user(user: User) -> list[int]:
+def recommend_for_user(
+        user: User
+) -> list[int]:
   raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                       detail='Unimplemented.')
