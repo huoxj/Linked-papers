@@ -14,7 +14,7 @@ data_path = os.path.join(root_path, 'data')
 papers_path = os.path.join(data_path, 'papers.csv.gz')
 feats_path = os.path.join(data_path, 'feats.csv.gz')
 model_path = os.path.join(data_path, 'skip_gram_model')
-index_path = os.path.join(data_path, 'faiss_ivf_index')
+index_path = os.path.join(data_path, 'faiss_hash_index')
 papers = pd.read_csv(papers_path, compression='gzip')
 feats = pd.read_csv(feats_path, compression='gzip', header=None).values.astype(np.float32)
 
@@ -28,9 +28,11 @@ fastapi.logger.logger.info('Finished loading embedding model.')
 if not os.path.exists(index_path):
   fastapi.logger.logger.info("Building faiss index")
   d = feats.shape[1]
-  quantizer = faiss.IndexFlatL2(d)
-  index=faiss.IndexIVFFlat(quantizer, d, 500 , faiss.METRIC_L2)
-  index.train(feats)
+  # quantizer = faiss.IndexFlatL2(d)
+  # index=faiss.IndexIVFFlat(quantizer, d, 500 , faiss.METRIC_L2)
+  # index.train(feats)
+  nbits=64
+  index=faiss.IndexLSH(d, nbits)
   index.add(feats)
   faiss.write_index(index, index_path)
 fastapi.logger.logger.info(f'Loading faiss index from {index_path}.')
