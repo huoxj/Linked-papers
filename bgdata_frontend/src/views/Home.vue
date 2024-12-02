@@ -60,6 +60,60 @@ function doSearch() {
       </v-row>
     </v-container>
   </div>
+  <v-container style="height: 40vh">
+    <v-row align="center" style="height: 40vh">
+      <v-spacer></v-spacer>
+      <v-col md="3">
+        <v-card
+          class="mx-auto"
+          prepend-icon="mdi-file-settings"
+          width="18vw"
+          height="100%"
+        >
+          <template v-slot:title>
+            <span class="h2 theme-dark">References</span>
+          </template>
+          <v-card-text class="bg-surface-light pt-4">
+            <p class="h3 theme-dark">Access with Ease</p>
+            <p class="text-body theme-dark">Quickly find and access the references of any paper in the search results for seamless exploration</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col md="4">
+        <v-card
+          class="mx-auto"
+          prepend-icon="mdi-text-box"
+          width="18vw"
+          height="100%"
+        >
+          <template v-slot:title>
+            <span class="h2 theme-dark">Abstracts</span>
+          </template>
+          <v-card-text class="bg-surface-light pt-4">
+            <p class="h3 theme-dark">Clear & Concise</p>
+            <p class="text-body theme-dark">Instantly view titles and abstracts with just one click for a quick overview of the research</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col md="3">
+        <v-card
+          class="mx-auto"
+          prepend-icon="mdi-graph"
+          width="18vw"
+          height="100%"
+        >
+          <template v-slot:title>
+            <span class="h2 theme-dark">Relation Graph</span>
+          </template>
+          <v-card-text class="bg-surface-light pt-4">
+            <p class="h3 theme-dark">Explore Connections</p>
+            <p class="text-body theme-dark">Effortlessly discover related papers or explore research within the same field through an intuitive relational graph</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-spacer></v-spacer>
+    </v-row>
+  </v-container>
   <!--  <v-container width="130vh">-->
   <!--    <v-row style="margin-bottom: 5px">-->
   <!--      <p class="h2 theme-dark">Recommend for you</p>-->

@@ -51,10 +51,10 @@ pipeline{
                         sh 'docker rm linkedpapers'
                     }
                     sh "docker run -d \
-                    --name linkedpapers -\
-                    p 9090:${BACKEND_PORT} \
-                    --link ${MYSQL_CONTAINER_NAME} \
+                    --name linkedpapers \
+                    -p 9090:${BACKEND_PORT} \
                     -v /home/runz/temp/data:/app/data \
+                    --link ${MYSQL_CONTAINER_NAME} \
                     bgdata_backend"
                 }
             }

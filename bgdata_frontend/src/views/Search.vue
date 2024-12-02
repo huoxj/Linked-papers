@@ -40,6 +40,7 @@ watch(page, (newPage) => {
   searchParams.page = newPage;
   updateList();
   window.scrollTo(0, 0);
+  //location.reload();
 });
 
 // do a new search
@@ -49,7 +50,7 @@ function doSearch() {
     path: "/search",
     query: {
       keywords: inputKeywords.value,
-      pageIndex: 1
+      pageIndex: 0
     }
   });
   searchKeywords.value = inputKeywords.value;
@@ -66,7 +67,7 @@ function doSearch() {
   <div class="upper-fill">
     <v-container class="search-wrapper">
       <v-row align="end" style="height: 70%" no-gutters>
-        <p class="h2 theme-dark">Total 0 Result(s) for "{{searchKeywords}}"</p>
+        <p class="h2 theme-dark">Results for "{{searchKeywords}}"</p>
       </v-row>
       <v-row align="end" style="height: 20%" no-gutters>
           <v-text-field
@@ -86,7 +87,7 @@ function doSearch() {
   </div>
   <v-container>
     <v-row justify="center">
-      <ResultItem v-for="paperId in searchIdList" :paper-id="paperId"></ResultItem>
+      <ResultItem v-for="paperId in searchIdList" :paper-id="paperId" :key="paperId"></ResultItem>
     </v-row>
   </v-container>
   <v-pagination
