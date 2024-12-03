@@ -13,3 +13,7 @@ auth:
 search:
   page_size: 10
   max_results: 50
+  weight_matching: .6
+  weight_similarity: .1
+  weight_up_to_date: .15
+  weight_citation: .15
