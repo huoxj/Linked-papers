@@ -1,3 +1,5 @@
+import sqlalchemy
+from sqlalchemy.orm import declared_attr
 from sqlmodel import SQLModel, Field, Relationship
 
 
@@ -25,6 +27,7 @@ class PaperInDB(SQLModel, table=True):
     sa_relationship_kwargs={'primaryjoin': 'PaperInDB.id == PaperReferenceLink.target_id',
                             'secondaryjoin': 'PaperInDB.id == PaperReferenceLink.source_id'}
   )
+  citation_count: int = Field(default=0, index=True)
 
 
 class SimilarityInDB(SQLModel, table=True):

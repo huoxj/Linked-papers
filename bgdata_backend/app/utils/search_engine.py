@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import os
 import faiss
-import re
 
 import yaml
 from fastapi import HTTPException, status
@@ -43,10 +42,7 @@ with open('config/config.yaml', 'r') as f:
   max_results = yaml.safe_load(f)['search']['max_results']
 
 
-def keyword_to_embedding(keywords: str, embedding_model: Word2Vec) -> np.ndarray:
-  keywords = keywords.lower()
-  keywords = re.sub(r'[^\w\s]', '', keywords)  
-  keywords = keywords.split()
+def keyword_to_embedding(keywords: list[str], embedding_model: Word2Vec) -> np.ndarray:
   embedding_vector = np.zeros(embedding_model.vector_size)
   valid_keywords = 0
 
@@ -63,16 +59,26 @@ def keyword_to_embedding(keywords: str, embedding_model: Word2Vec) -> np.ndarray
   return embedding_vector
 
 
-def search(keywords: str) -> list[int]:
+def search_by_similarity(keywords: list[str]) -> list[int]:
   # transform the keyword to the embedding vector
   embedded_keyword = keyword_to_embedding(keywords, embedding_model)
 
-  # calculate the cosine similarity between the keyword and the papers
-  # sim = np.dot(feats, embedded_keyword)
-  # idx = np.argsort(sim)[::-1]
-  # return papers.iloc[idx[:max_results]].index.tolist()
-
   # use faiss to search
-  D,I=faiss_index.search(embedded_keyword.reshape(1, -1), max_results)
+  _, I = faiss_index.search(embedded_keyword.reshape(1, -1), max_results)
   return papers.iloc[I[0]].index.tolist()
 
+
+def calc_matching_score(matching_index: int) -> float:
+  return 0.0 if matching_index < 0 else 1.0 - np.sqrt(matching_index) / max_results
+
+
+def calc_similarity_score(similarity_index: int) -> float:
+  return 0.0 if similarity_index < 0 else 1.0 - np.sqrt(similarity_index) / max_results
+
+
+def calc_up_to_date_score(diff: int) -> float:
+  return -np.sqrt(-diff)
+
+
+def calc_citation_score(citation_count: int) -> float:
+  return np.log(citation_count + 1)

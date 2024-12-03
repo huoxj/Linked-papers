@@ -44,6 +44,7 @@ LOAD DATA LOCAL INFILE "{}"
     IGNORE 1 ROWS
 """
 CREATE_INDEX_STMT = 'CREATE INDEX {} ON {} ({})'
+CREATE_FULLTEXT_INDEX_STMT = 'CREATE FULLTEXT INDEX {} ON {} ({})'
 
 PAPER_TABLE_NAME = 'paperindb'
 SIMILARITY_TABLE_NAME = 'similarityindb'
@@ -56,9 +57,9 @@ CREATE_PAPER_TABLE_STMT = f"""
           title VARCHAR(255) NOT NULL,
           year VARCHAR(255) NOT NULL,
           category VARCHAR(255) NOT NULL,
-          reference_id INTEGER,
+          citation_count INTEGER DEFAULT 0,
           PRIMARY KEY (id),
-          FOREIGN KEY(reference_id) REFERENCES paperindb (id)
+          FULLTEXT(title, abstract)
   );
 """
 
@@ -79,6 +80,15 @@ CREATE_REFERENCE_TABLE_STMT = f"""
           PRIMARY KEY (source_id, target_id),
           FOREIGN KEY(source_id) REFERENCES paperindb (id),
           FOREIGN KEY(target_id) REFERENCES paperindb (id)
+  );
+"""
+
+UPDATE_CITATION_COUNT_STMT = f"""
+  UPDATE {PAPER_TABLE_NAME} AS p
+  SET citation_count = (
+    SELECT COUNT(*)
+    FROM {REFERENCE_TABLE_NAME} AS r
+    WHERE r.target_id = p.id
   );
 """
 
@@ -103,16 +113,24 @@ STMTS = [
   CREATE_INDEX_STMT.format(f'ix_{REFERENCE_TABLE_NAME}_source_id', REFERENCE_TABLE_NAME, 'source_id'),
   CREATE_INDEX_STMT.format(f'ix_{REFERENCE_TABLE_NAME}_target_id', REFERENCE_TABLE_NAME, 'target_id'),
 
-  # load data from .csv files
+  # create full text index
+  CREATE_FULLTEXT_INDEX_STMT.format(f'ix_{PAPER_TABLE_NAME}_fulltext', PAPER_TABLE_NAME, 'title, abstract'),
+
+  # load data from papers.csv
   f'{LOAD_DATA_STMT.format(papers_path, PAPER_TABLE_NAME)}\n'
   f'(title, abstract, category, year)',
 
+  # load data from similar_papers.csv
   f'{LOAD_DATA_STMT.format(similar_papers_path, SIMILARITY_TABLE_NAME)}\n'
   f'(source_id, target_id, @similarity)\n'
   f'SET similarity = CAST(@similarity AS FLOAT)',
 
+  # load data from edges.csv
   f'{LOAD_DATA_STMT.format(edges_path, REFERENCE_TABLE_NAME)}\n'
   f'(source_id, target_id)',
+
+  # update citation_count in paperindb
+  UPDATE_CITATION_COUNT_STMT,
 ]
 
 

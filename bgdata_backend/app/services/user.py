@@ -1,8 +1,8 @@
 from sqlmodel import Session, select
 
-from app.models.user import User, UserRegister
+from app.models.user import UserRegister
 from app.schemas.user import UserInDB
-from app.utils.encryption import encrypt_string, verify_string, hash_string
+from app.utils.encryption import encrypt_string, hash_string
 
 
 def create_user(
